@@ -10,9 +10,11 @@
   :root {
     --bg: #050810;
     --surface: #0c1120;
-    --border: #1a2340;
-    --accent: #3b82f6;
-    --accent2: #06b6d4;
+    --border:  rgba(255,255,255,0.09);
+    /* --border-hover:   #ff8a00; */
+    --accent: #ff8a00;
+    --accent2: #38bdf8;        /* sky blue */
+    --accent3: #f472b6;  
     --gold: #f59e0b;
     --text: #e8edf8;
     --muted: #6b7a99;
@@ -27,6 +29,22 @@
     overflow-x: hidden;
     cursor: none;
   }
+ /* ── RICH MULTI-LAYER BACKGROUND ── */
+  body::before {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 0%,   rgba(139,92,246,0.13) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 10%,  rgba(56,189,248,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 60% at 50% 100%, rgba(244,114,182,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 60%,  rgba(167,139,250,0.08) 0%, transparent 50%),
+      linear-gradient(160deg, #0b0c18 0%, #07080f 40%, #0a0811 100%);
+  }
+  /* subtle dot grid */
+  body::after {
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: radial-gradient(rgba(167,139,250,0.12) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
 
   /* Custom cursor */
   .cursor {
@@ -39,7 +57,7 @@
   }
   .cursor-ring {
     position: fixed; width: 36px; height: 36px;
-    border: 1px solid rgba(59,130,246,0.5); border-radius: 50%;
+    border: 1px solid var(--accent); border-radius: 50%;
     pointer-events: none; z-index: 9998;
     transform: translate(-50%,-50%);
     transition: width 0.2s, height 0.2s;
@@ -58,14 +76,22 @@
   #techCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
 
   /* SCROLL PROGRESS */
-  .scroll-progress {
+  /* .scroll-progress {
     position: fixed; top: 0; left: 0; height: 2px;
     background: linear-gradient(90deg, var(--accent), var(--accent2));
     z-index: 200; width: 0%;
     box-shadow: 0 0 8px var(--accent);
     transition: width 0.1s linear;
+  } */
+.scroll-progress {
+    position:fixed; top:0; left:0; height:2px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+    background-size:300% 100%; animation:scrollGrad 4s linear infinite;
+    z-index:200; width:0%;
+    box-shadow:0 0 10px var(--accent), 0 0 20px rgba(167,139,250,0.4);
+    transition:width 0.1s linear;
   }
-
+  @keyframes scrollGrad { 0%{background-position:0% 50%} 100%{background-position:300% 50%} }
   /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0;
@@ -78,7 +104,7 @@
   .nav-logo span { color: var(--accent); }
   .nav-links { display:flex; gap:40px; list-style:none; }
   .nav-links a { color:var(--muted); text-decoration:none; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
-  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+  .nav-links a:hover, .nav-links a.active { color: white; }
 
   /* HERO */
   .hero { min-height:100vh; display:flex; align-items:center; padding:120px 60px 80px; gap:60px; position:relative; z-index:1; }
@@ -94,15 +120,52 @@
   .hero-badge::before { content:''; width:6px; height:6px; background:var(--accent); border-radius:50%; animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
   .hero-name { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(2.8rem,5vw,4.2rem); line-height:1.0; letter-spacing:-0.03em; margin-bottom:12px; animation:fadeUp 0.6s 0.1s ease both; }
-  .hero-name .line2 { font-family:'Instrument Serif',serif; font-style:italic; color:var(--accent); }
-  .hero-title { font-size:0.8rem; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:28px; animation:fadeUp 0.6s 0.2s ease both; min-height:1.4em; }
+  .hero-name .line2 {font-family:'Syne',sans-serif;color: #ff8a00; font-weight:800; font-size:clamp(2.8rem,5vw,4.2rem); line-height:1.0; letter-spacing:-0.03em; margin-bottom:12px; animation:fadeUp 0.6s 0.1s ease both; }
+  .hero-title { font-size:0.8rem; color: #ffd000; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:28px; animation:fadeUp 0.6s 0.2s ease both; min-height:1.4em; }
   .hero-desc { font-size:0.85rem; line-height:1.9; color:#8899bb; max-width:520px; margin-bottom:44px; animation:fadeUp 0.6s 0.3s ease both; }
   .hero-cta { display:flex; gap:16px; flex-wrap:wrap; animation:fadeUp 0.6s 0.4s ease both; }
-  .btn-primary { padding:14px 32px; background:var(--accent); color:#fff; border:none; border-radius:4px; font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.08em; cursor:none; text-decoration:none; transition:background 0.2s,transform 0.15s,box-shadow 0.2s; box-shadow:0 0 24px rgba(59,130,246,0.3); }
-  .btn-primary:hover { background:#2563eb; transform:translateY(-1px); box-shadow:0 0 36px rgba(59,130,246,0.5); }
-  .btn-secondary { padding:14px 32px; background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:4px; font-family:'DM Mono',monospace; font-size:0.75rem; letter-spacing:0.08em; cursor:none; text-decoration:none; transition:border-color 0.2s,color 0.2s; }
-  .btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-primary,
+.btn-secondary {
 
+  padding: 14px 28px;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  transition: .3s;
+}
+
+.btn-primary {
+
+  background:
+    linear-gradient(135deg,#ff8a00,#ffd000);
+
+  color: black;
+
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 0 25px rgba(255,170,0,0.4);
+}
+
+.btn-secondary {
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  color: white;
+}
+
+.btn-secondary:hover {
+
+  border-color: var(--orange);
+}
   .hero-visual { flex:0 0 340px; display:flex; flex-direction:column; gap:16px; animation:fadeUp 0.6s 0.5s ease both; }
   .photo-frame { position:relative; border-radius:12px; overflow:hidden; border:1px solid var(--border); aspect-ratio:3/4; max-height:380px; }
   .photo-frame img { width:100%; height:100%; object-fit:cover; filter:grayscale(20%) contrast(1.05); transition:filter 0.4s; }
@@ -125,7 +188,7 @@
   .stack-logos-label {
     text-align: center;
     font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 22px;
+    color: white; margin-bottom: 22px;
     display: flex; align-items: center; justify-content: center; gap: 16px;
   }
   .stack-logos-label::before, .stack-logos-label::after {
@@ -149,7 +212,7 @@
   .logo-pill {
     display: flex; align-items: center; gap: 10px;
     padding: 10px 20px;
-    background: var(--surface);
+    background: rgb(237, 239, 243);
     border: 1px solid var(--border);
     border-radius: 10px;
     white-space: nowrap;
@@ -163,7 +226,7 @@
   .logo-pill img { width: 26px; height: 26px; object-fit: contain; transition: transform 0.3s, filter 0.3s; }
   .logo-pill:hover img { transform: scale(1.15) rotate(-4deg); filter: drop-shadow(0 0 5px rgba(59,130,246,0.5)); }
   .logo-pill span { font-size: 0.73rem; color: var(--muted); letter-spacing: 0.04em; transition: color 0.2s; }
-  .logo-pill:hover span { color: var(--text); }
+  .logo-pill:hover span { color: rgb(5, 13, 15); }
 
   /* ── PHOTO MARQUEE ── */
   .photo-marquee-section {
@@ -174,7 +237,7 @@
   .photo-marquee-label {
     text-align: center;
     font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 32px;
+    color: var(--text); margin-bottom: 32px;
     display: flex; align-items: center; justify-content: center; gap: 16px;
   }
   .photo-marquee-label::before, .photo-marquee-label::after {
@@ -227,10 +290,10 @@
 
   /* SECTION SHARED */
   .section-inner { max-width:1100px; margin:0 auto; padding:100px 60px; position:relative; z-index:1; }
-  .section-label { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; display:flex; align-items:center; gap:12px; }
+  .section-label { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:white; margin-bottom:12px; display:flex; align-items:center; gap:12px; }
   .section-label::after { content:''; flex:1; height:1px; background:var(--border); max-width:80px; }
   .section-title { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.8rem,3vw,2.4rem); letter-spacing:-0.02em; margin-bottom:60px; line-height:1.15; }
-  .section-title em { font-family:'Instrument Serif',serif; font-style:italic; color:var(--accent); }
+  .section-title em { font-style: normal;color: var(--accent); font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.8rem,3vw,2.4rem); letter-spacing:-0.02em; margin-bottom:60px; line-height:1.15; }
 
   /* EXPERIENCE */
   .exp-timeline { position:relative; }
@@ -250,11 +313,11 @@
   .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
   .skill-group { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:28px; opacity:0; transform:translateY(20px); transition:opacity 0.4s,transform 0.4s,border-color 0.2s; }
   .skill-group.visible { opacity:1; transform:translateY(0); }
-  .skill-group:hover { border-color:rgba(59,130,246,0.4); transform:translateY(-3px); }
+  .skill-group:hover { border-color:#ff8a00; transform:translateY(-3px); }
   .skill-group-icon { font-size:1.4rem; margin-bottom:12px; }
   .skill-group-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.05em; margin-bottom:16px; }
   .skill-tags { display:flex; flex-wrap:wrap; gap:8px; }
-  .skill-tag { padding:4px 10px; background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:4px; font-size:0.68rem; color:#8899bb; letter-spacing:0.05em; transition:background 0.2s,color 0.2s; }
+  .skill-tag { padding:4px 10px; background:rgba(6,182,212,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:4px; font-size:0.68rem; color:var(--accent2); letter-spacing:0.05em; transition:background 0.2s,color 0.2s; }
   .skill-tag:hover { background:rgba(59,130,246,0.2); color:var(--text); }
 
   /* CERTS */
@@ -271,17 +334,42 @@
   .project-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:32px; position:relative; overflow:hidden; opacity:0; transform:translateY(20px); transition:opacity 0.5s,transform 0.5s,border-color 0.2s; }
   .project-card.visible { opacity:1; transform:translateY(0); }
   .project-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); opacity:0; transition:opacity 0.2s; }
-  .project-card:hover { border-color:rgba(59,130,246,0.4); transform:translateY(-4px); }
+  .project-card:hover { border-color:var(--accent); transform:translateY(-4px); }
   .project-card:hover::before { opacity:1; }
-  .project-num { font-family:'Instrument Serif',serif; font-style:italic; font-size:2.5rem; color:var(--border); line-height:1; margin-bottom:16px; }
+  .project-num { font-family:'Instrument Serif',serif; font-style:italic; font-size:2.5rem; color:var(--accent); line-height:1; margin-bottom:16px; }
   .project-name { font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:12px; }
   .project-desc { font-size:0.78rem; line-height:1.8; color:#8899bb; margin-bottom:20px; }
   .project-stack { display:flex; flex-wrap:wrap; gap:6px; }
   .stack-tag { padding:3px 8px; background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.2); border-radius:3px; font-size:0.65rem; color:var(--accent2); letter-spacing:0.06em; }
 
   /* EDUCATION */
-  .edu-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:36px; display:flex; gap:32px; align-items:flex-start; max-width:680px; transition:border-color 0.2s; }
-  .edu-card:hover { border-color:rgba(59,130,246,0.4); }
+  /* .edu-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:36px; display:flex; gap:32px; align-items:flex-start; max-width:680px; transition:border-color 0.2s; }
+  .edu-card:hover { border-color:var(--accent); } */
+  .edu-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 36px;
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  max-width: 680px;
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.edu-card:hover {
+  border-color: var(--accent);
+
+ box-shadow:
+  0 0 12px rgba(255, 140, 0, 0.18),
+  0 4px 20px rgba(255, 140, 0, 0.08);
+
+  transform: translateY(-2px);
+}
   .edu-year { font-family:'Syne',sans-serif; font-size:0.7rem; color:var(--accent); letter-spacing:0.15em; text-transform:uppercase; white-space:nowrap; padding-top:4px; }
   .edu-degree { font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:6px; }
   .edu-school { font-size:0.8rem; color:var(--muted); margin-bottom:12px; }
@@ -354,6 +442,363 @@
     .hero-visual{width:100%}
     .section-inner{padding:60px 24px}
   }
+
+  /* ── JOURNEY ROADMAP ── */
+  /* .journey-wrap { position:relative; }
+  .journey-milestones {
+    display:flex; flex-direction:column; gap:0;
+    position:relative; padding:20px 0;
+  }
+  .journey-milestones::before {
+    content:'';
+    position:absolute; left:50%; top:0; bottom:0; width:2px;
+    background:linear-gradient(to bottom, var(--accent), rgba(59,130,246,0.1));
+    transform:translateX(-50%);
+  }
+
+  .milestone {
+    display:grid; grid-template-columns:1fr 60px 1fr;
+    align-items:start; gap:0; padding:0 0 56px;
+    opacity:0; transform:translateY(24px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .milestone.vis { opacity:1; transform:translateY(0); }
+  .milestone.right-side .milestone-node { grid-column:2; }
+
+  .milestone-node {
+    grid-column:2; grid-row:1;
+    width:52px; height:52px;
+    background:var(--surface);
+    border:2px solid var(--accent);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem;
+    position:relative; z-index:2;
+    box-shadow:0 0 0 6px rgba(59,130,246,0.1), 0 0 20px rgba(59,130,246,0.3);
+    transition:box-shadow 0.3s, transform 0.3s;
+    align-self:center;
+  }
+  .milestone:hover .milestone-node { transform:scale(1.1); box-shadow:0 0 0 8px rgba(59,130,246,0.15), 0 0 32px rgba(59,130,246,0.5); }
+
+  .current-node {
+    background:var(--accent);
+    box-shadow:0 0 0 6px rgba(59,130,246,0.2), 0 0 28px rgba(59,130,246,0.6) !important;
+    animation:nodePulse 2.5s ease-in-out infinite;
+  }
+  @keyframes nodePulse {
+    0%,100% { box-shadow:0 0 0 6px rgba(59,130,246,0.2), 0 0 28px rgba(59,130,246,0.5); }
+    50%      { box-shadow:0 0 0 12px rgba(59,130,246,0.08), 0 0 44px rgba(59,130,246,0.7); }
+  }
+  .future-node { border-color:rgba(59,130,246,0.35); opacity:0.65; }
+
+  .milestone-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:22px 24px;
+    transition:border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .milestone-card::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(59,130,246,0.04), transparent);
+    opacity:0; transition:opacity 0.3s;
+  }
+  .milestone:hover .milestone-card { border-color:rgba(59,130,246,0.35); box-shadow:0 6px 30px rgba(59,130,246,0.1); }
+  .milestone:hover .milestone-card::before { opacity:1; }
+  .milestone-card.left  { grid-column:1; margin-right:24px; }
+  .milestone-card.right { grid-column:3; margin-left:24px; }
+  .milestone.right-side .milestone-card.right { grid-column:3; }
+
+  .current-card { border-color:rgba(59,130,246,0.35) !important; box-shadow:0 4px 24px rgba(59,130,246,0.12) !important; }
+  .future-card  { opacity:0.75; border-style:dashed; }
+
+  .milestone-year { font-size:0.65rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+  .milestone-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; margin-bottom:4px; }
+  .milestone-sub { font-size:0.72rem; color:var(--muted); margin-bottom:12px; }
+  .milestone-desc { font-size:0.77rem; line-height:1.75; color:#8899bb; margin-bottom:14px; }
+  .milestone-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:4px 12px; border-radius:100px;
+    font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase;
+  }
+  .milestone-badge.done    { background:rgba(16,185,129,0.1);  border:1px solid rgba(16,185,129,0.3);  color:#10b981; }
+  .milestone-badge.current { background:rgba(59,130,246,0.1);  border:1px solid rgba(59,130,246,0.35); color:var(--accent); }
+  .milestone-badge.future  { background:rgba(245,158,11,0.1);  border:1px solid rgba(245,158,11,0.3);  color:var(--gold); }
+
+  @media(max-width:768px) {
+    .journey-milestones::before { left:26px; }
+    .milestone, .milestone.right-side { grid-template-columns:52px 1fr; gap:0; }
+    .milestone-node, .milestone.right-side .milestone-node { grid-column:1; grid-row:1; }
+    .milestone-card.left, .milestone-card.right, .milestone.right-side .milestone-card.right {
+      grid-column:2; margin-left:16px; margin-right:0;
+    }
+  } */
+  .journey-wrap { position:relative; }
+  .journey-milestones {
+    display:flex; flex-direction:column; gap:0;
+    position:relative; padding:20px 0;
+  }
+  .journey-milestones::before {
+    content:'';
+    position:absolute; left:50%; top:0; bottom:0; width:2px;
+    background:linear-gradient(to bottom, var(--accent), rgba(59,130,246,0.1));
+    transform:translateX(-50%);
+  }
+
+  .milestone {
+    display:grid; grid-template-columns:1fr 60px 1fr;
+    align-items:start; gap:0; padding:0 0 56px;
+    opacity:0; transform:translateY(24px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .milestone.vis { opacity:1; transform:translateY(0); }
+  .milestone.right-side .milestone-node { grid-column:2; }
+
+  .milestone-node {
+    grid-column:2; grid-row:1;
+    width:52px; height:52px;
+    background:var(--surface);
+    border:2px solid var(--accent);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem;
+    position:relative; z-index:2;
+    box-shadow:0 0 0 6px rgba(59,130,246,0.1), 0 0 20px rgba(59,130,246,0.3);
+    transition:box-shadow 0.3s, transform 0.3s;
+    align-self:center;
+  }
+  .milestone:hover .milestone-node { transform:scale(1.1); box-shadow:0 0 0 8px rgba(59,130,246,0.15), 0 0 32px rgba(59,130,246,0.5); }
+
+  .current-node {
+    background:var(--accent);
+    box-shadow:0 0 0 6px rgba(59,130,246,0.2), 0 0 28px rgba(59,130,246,0.6) !important;
+    animation:nodePulse 2.5s ease-in-out infinite;
+  }
+  @keyframes nodePulse {
+    0%,100% { box-shadow:0 0 0 6px rgba(59,130,246,0.2), 0 0 28px rgba(59,130,246,0.5); }
+    50%      { box-shadow:0 0 0 12px rgba(59,130,246,0.08), 0 0 44px rgba(59,130,246,0.7); }
+  }
+  .future-node { border-color:rgba(59,130,246,0.35); opacity:0.65; }
+
+  .milestone-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:22px 24px;
+    transition:border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .milestone-card::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(59,130,246,0.04), transparent);
+    opacity:0; transition:opacity 0.3s;
+  }
+  .milestone:hover .milestone-card { border-color:rgba(59,130,246,0.35); box-shadow:0 6px 30px rgba(59,130,246,0.1); }
+  .milestone:hover .milestone-card::before { opacity:1; }
+  .milestone-card.left  { grid-column:1; margin-right:24px; }
+  .milestone-card.right { grid-column:3; margin-left:24px; }
+  .milestone.right-side .milestone-card.right { grid-column:3; }
+
+  .current-card { border-color:rgba(59,130,246,0.35) !important; box-shadow:0 4px 24px rgba(59,130,246,0.12) !important; }
+  .future-card  { opacity:0.75; border-style:dashed; }
+
+  .milestone-year { font-size:0.65rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+  .milestone-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; margin-bottom:4px; }
+  .milestone-sub { font-size:0.72rem; color:var(--muted); margin-bottom:12px; }
+  .milestone-desc { font-size:0.77rem; line-height:1.75; color:#8899bb; margin-bottom:14px; }
+  .milestone-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:4px 12px; border-radius:100px;
+    font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase;
+  }
+  .milestone-badge.done    { background:rgba(16,185,129,0.1);  border:1px solid rgba(16,185,129,0.3);  color:#10b981; }
+  .milestone-badge.current { background:rgba(59,130,246,0.1);  border:1px solid rgba(59,130,246,0.35); color:var(--accent); }
+  .milestone-badge.future  { background:rgba(245,158,11,0.1);  border:1px solid rgba(245,158,11,0.3);  color:var(--gold); }
+
+  @media(max-width:768px) {
+    .journey-milestones::before { left:26px; }
+    .milestone, .milestone.right-side { grid-template-columns:52px 1fr; gap:0; }
+    .milestone-node, .milestone.right-side .milestone-node { grid-column:1; grid-row:1; }
+    .milestone-card.left, .milestone-card.right, .milestone.right-side .milestone-card.right {
+      grid-column:2; margin-left:16px; margin-right:0;
+    }
+  }
+
+  /* ── STRENGTHS ── */
+  .strengths-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+  gap:20px;
+}
+
+.strength-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px;
+  position:relative;
+  overflow:hidden;
+
+  opacity:0;
+  transform:translateY(20px);
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    translate 0.35s ease;
+}
+
+.strength-card.vis {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Main Hover Effect */
+/* .strength-card:hover {
+  transform:translateY(-8px) scale(1.02);
+  border-color:rgba(255,170,0,0.7);
+
+  box-shadow:
+    0 0 12px rgba(255,170,0,0.35),
+    0 0 32px rgba(255,140,0,0.25),
+    0 0 60px rgba(255,120,0,0.18),
+    0 10px 40px rgba(0,0,0,0.5);
+} */
+ .strength-card:hover {
+  transform: translateY(-6px);
+
+  border-color: rgba(22, 164, 225, 0.6);
+
+  box-shadow:
+    0 0 10px rgba(255,170,0,0.15),
+    0 6px 24px rgba(255,140,0,0.08);
+}
+
+/* Animated Neon Glow */
+/* .strength-glow {
+  position:absolute;
+  top:-40px;
+  right:-40px;
+
+  width:140px;
+  height:140px;
+
+  background:radial-gradient(
+    circle,
+    rgba(255,200,0,0.45) 0%,
+    rgba(255,140,0,0.28) 35%,
+    rgba(255,90,0,0.12) 55%,
+    transparent 75%
+  );
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s ease;
+
+  opacity:0;
+  pointer-events:none;
+  filter:blur(8px);
+}
+
+.strength-card:hover .strength-glow {
+  opacity:1;
+  transform:scale(1.25);
+} */
+.strength-glow {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+
+  width: 80px;
+  height: 80px;
+
+  background: radial-gradient(
+    circle,
+    rgba(255,170,0,0.18) 0%,
+    rgba(255,140,0,0.08) 45%,
+    transparent 75%
+  );
+
+  opacity: 0;
+  filter: blur(12px);
+
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.strength-card:hover .strength-glow {
+  opacity: 1;
+}
+/* Optional subtle animated shine */
+.strength-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(230, 166, 15, 0.08) 45%,
+    rgba(255,120,0,0.12) 50%,
+    transparent 80%
+  );
+
+  transform:translateX(-120%);
+  transition:transform 0.8s ease;
+}
+
+.strength-card:hover::before {
+  transform:translateX(120%);
+}
+  .strength-card:hover .strength-glow { opacity:1; }
+  .strength-icon-wrap {
+    width:44px; height:44px; border-radius:10px;
+    background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem; margin-bottom:16px;
+    transition:transform 0.3s, background 0.3s;
+  }
+  .strength-card:hover .strength-icon-wrap { transform:rotate(-8deg) scale(1.1); background:rgba(59,130,246,0.2); }
+  .strength-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:10px; }
+  .strength-desc { font-size:0.77rem; line-height:1.75; color:#8899bb; margin-bottom:18px; }
+  .strength-bar-wrap { height:3px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden; }
+  .strength-bar {
+    height:100%; width:0%; border-radius:2px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    transition:width 1.2s cubic-bezier(0.4,0,0.2,1);
+    box-shadow:0 0 8px rgba(59,130,246,0.5);
+  }
+
+  /* ── HOBBIES ── */
+  .hobbies-grid {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px;
+  }
+  .hobby-card {
+    position:relative; border-radius:14px; overflow:hidden;
+    border:1px solid var(--border); aspect-ratio:1/1;
+    opacity:0; transform:scale(0.95);
+    transition:opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, box-shadow 0.3s;
+    cursor:default;
+  }
+  .hobby-card.vis { opacity:1; transform:scale(1); }
+  .hobby-card:hover { border-color:rgba(59,130,246,0.4); box-shadow:0 8px 40px rgba(59,130,246,0.15); }
+  .hobby-bg {
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:5rem; opacity:0.07;
+    transition:opacity 0.4s, transform 0.4s;
+  }
+  .hobby-card:hover .hobby-bg { opacity:0.12; transform:scale(1.15) rotate(8deg); }
+  .hobby-content {
+    position:relative; z-index:1; height:100%;
+    background:linear-gradient(135deg, var(--surface), #080e1c);
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:24px;
+    transition:background 0.3s;
+  }
+  .hobby-card:hover .hobby-content { background:linear-gradient(135deg, #0f1828, #080e1c); }
+  .hobby-emoji { font-size:1.8rem; margin-bottom:12px; }
+  .hobby-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:8px; }
+  .hobby-desc { font-size:0.72rem; line-height:1.65; color:#8899bb; }
 </style>
 </head>
 <body>
@@ -368,8 +813,9 @@
   <ul class="nav-links">
     <li><a href="#experience">Experience</a></li>
     <li><a href="#skills">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#certs">Certifications</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#strengths">Strengths</a></li>
+    <li><a href="#hobbies">Hobbies</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
@@ -384,8 +830,7 @@
     </h1>
     <p class="hero-title" id="heroTitle">AI Software Engineer · Agentic AI · Multi-Agent Systems</p>
     <p class="hero-desc">
-      Specializing in the Agentic Shift and Multi-Agent Orchestration with LangGraph &amp; LangChain.
-      Building intelligent systems that bridge legacy infrastructure with modern AI — on AWS, GCP, and Azure.
+      Building production-ready Agentic AI systems that bridge business needs and modern AI capabilities. Specializing in LangGraph, LangChain, RAG, FastAPI, and multi-agent orchestration across AWS, Azure and GCP.
     </p>
     <div class="hero-cta">
       <a href="#contact" class="btn-primary">Get in touch</a>
@@ -417,30 +862,65 @@
   <div class="photo-marquee-label">Gallery</div>
   <div class="photo-track-wrap" id="photoWrap1" style="margin-bottom:16px"></div>
   <div class="photo-track-wrap" id="photoWrap2"></div>
-  <!-- <p class="photo-upload-hint" style="margin-top:18px">
-    Replace placeholder slots by setting <code>PHOTO_URLS</code> array in the script below
-  </p> -->
 </section>
 
 <!-- EXPERIENCE -->
 <section id="experience">
   <div class="section-inner">
     <div class="section-label">01 — Experience</div>
-    <h2 class="section-title">Where I've <em>built</em></h2>
-    <div class="exp-timeline">
-      <div class="exp-item">
-        <div class="exp-date">Sep 2024 — Present</div>
-        <div class="exp-role">Associate Software Engineer</div>
-        <div class="exp-company">Accenture · Hyderabad, India</div>
-        <ul class="exp-bullets">
-          <li>Engineered a <strong>Multi-Agent AI Framework</strong> using LangGraph and LangChain to automate legacy code transformation, reducing manual analysis time by <strong>40%</strong></li>
-          <li>Designed stateful autonomous workflows to generate call graphs, dependency mappings, and business rules, improving architectural mapping accuracy by <strong>25%</strong></li>
-          <li>Architected a <strong>Hybrid Memory Layer</strong> using Neo4j (Graph) and ChromaDB (Vector) for deep code analysis and high-precision RAG</li>
-          <li>Developed cloud-agnostic, interactable AI agents using <strong>FastAPI</strong> compatible with AWS, GCP, and Azure, with flexible OpenAI/Claude integration</li>
-          <li>Streamlined forward-engineering by converting complex legacy logic into structured, machine-readable documentation</li>
-          <li>Spearheaded <strong>Knowledge Transfer sessions</strong> on Agentic AI and multi-agent system design, establishing internal GenAI standards</li>
-        </ul>
+    <h2 class="section-title">Where <em>I've built</em></h2>
+    <div class="exp-card-grid">
+
+      <!-- Card -->
+      <div class="exp-card" id="expCard0">
+        <div class="exp-card-date-col">
+          <!-- <div class="exp-card-date">Sep 2024<br>— Present</div> -->
+          <!-- <div class="exp-card-company-tag">Accenture</div> -->
+        </div>
+        <div style="display:flex;align-items:stretch;">
+          <div class="exp-spine"><div class="exp-spine-dot"></div></div>
+          <div class="exp-card-body">
+            <div class="exp-card-header">
+              <div class="exp-role">Forward Deployed AI Engineer</div>
+              <div class="exp-status-badge">Current</div>
+            </div>
+            <div class="exp-company">Accenture · Hyderabad, India</div>
+            <ul class="exp-bullets">
+              <li class="exp-bullet-item" data-delay="0">
+                <div class="exp-bullet-icon">🤖</div>
+                <div class="exp-bullet-text">Engineered a <strong>Multi-Agent AI Framework</strong> using LangGraph and LangChain to automate legacy code transformation, reducing manual analysis time by <strong>40%</strong></div>
+              </li>
+              <li class="exp-bullet-item" data-delay="80">
+                <div class="exp-bullet-icon">🔁</div>
+                <div class="exp-bullet-text">Designed <strong>stateful autonomous workflows</strong> to generate call graphs, dependency mappings, and business rules — improving architectural mapping accuracy by <strong>25%</strong></div>
+              </li>
+              <li class="exp-bullet-item" data-delay="160">
+                <div class="exp-bullet-icon">🧠</div>
+                <div class="exp-bullet-text">Architected a <strong>Hybrid Memory Layer</strong> using Neo4j (Graph) + ChromaDB (Vector) for deep code analysis and high-precision Retrieval-Augmented Generation</div>
+              </li>
+              <li class="exp-bullet-item" data-delay="240">
+                <div class="exp-bullet-icon">☁️</div>
+                <div class="exp-bullet-text">Developed <strong>cloud-agnostic AI agents</strong> via FastAPI, compatible across AWS, GCP, and Azure with flexible OpenAI/Claude model integration</div>
+              </li>
+              <li class="exp-bullet-item" data-delay="320">
+                <div class="exp-bullet-icon"></div>
+                <div class="exp-bullet-text">📄 Streamlined forward-engineering by converting complex <strong>legacy logic</strong> into structured, machine-readable documentation for modern system design</div>
+              </li>
+              <li class="exp-bullet-item" data-delay="400">
+                <div class="exp-bullet-icon"></div>
+                <div class="exp-bullet-text">🎓 Spearheaded <strong>KT sessions</strong> on Agentic AI and multi-agent system design, establishing internal GenAI development standards</div>
+              </li>
+            </ul>
+            <!-- <div class="exp-impact-row">
+              <span class="exp-impact-chip">40% time saved</span>
+              <span class="exp-impact-chip">25% accuracy boost</span>
+              <span class="exp-impact-chip">LangGraph · Neo4j · RAG</span>
+              <span class="exp-impact-chip">AWS · GCP · Azure</span>
+            </div> -->
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -564,6 +1044,185 @@
   </div>
 </section>
 
+
+<!-- MY JOURNEY -->
+<section id="journey">
+  <div class="section-inner">
+    <div class="section-label">07 — Journey</div>
+    <h2 class="section-title">The <em>road</em> so far</h2>
+    <div class="journey-wrap">
+      <!-- SVG curved road is injected by JS -->
+      <div id="journeySvgWrap"></div>
+      <div class="journey-milestones">
+
+        <div class="milestone" data-index="0" data-status="done">
+          <div class="milestone-connector top"></div>
+          <div class="milestone-node">
+            <div class="milestone-icon">🎓</div>
+          </div>
+          <div class="milestone-card left">
+            <div class="milestone-year">2020 – 2024</div>
+            <div class="milestone-title">Bachelor of Technology</div>
+            <div class="milestone-sub">AI &amp; Data Science · SRKREC, Bhimavaram</div>
+            <div class="milestone-desc">Graduated with a CGPA of 8.73. Laid the foundation in AI, machine learning, data structures, and software engineering principles.</div>
+            <div class="milestone-badge done">Achieved ✓</div>
+          </div>
+        </div>
+
+        <div class="milestone right-side" data-index="1" data-status="done">
+          <div class="milestone-node">
+            <div class="milestone-icon">💼</div>
+          </div>
+          <div class="milestone-card right">
+            <div class="milestone-year">Sep 2024 – Present</div>
+            <div class="milestone-title">Associate Software Engineer</div>
+            <div class="milestone-sub">Accenture · Hyderabad</div>
+            <div class="milestone-desc">Joined Accenture's AI practice. Built production multi-agent systems, integrated LLMs into enterprise workflows, and earned multiple cloud certifications.</div>
+            <div class="milestone-badge done">Achieved ✓</div>
+          </div>
+        </div>
+
+        <div class="milestone" data-index="2" data-status="current">
+          <div class="milestone-node current-node">
+            <div class="milestone-icon">🤖</div>
+          </div>
+          <div class="milestone-card left current-card">
+            <div class="milestone-year">Now</div>
+            <div class="milestone-title">Agentic AI Development</div>
+            <div class="milestone-sub">LangGraph · LangChain · RAG · MCP</div>
+            <div class="milestone-desc">Deepening expertise in stateful multi-agent orchestration, hybrid memory architectures, and LLM evaluation. Pushing boundaries of autonomous AI systems.</div>
+            <div class="milestone-badge current">In Progress ⚡</div>
+          </div>
+        </div>
+
+        <div class="milestone right-side" data-index="3" data-status="future">
+          <div class="milestone-node future-node">
+            <div class="milestone-icon">🚀</div>
+          </div>
+          <div class="milestone-card right future-card">
+            <div class="milestone-year">Next</div>
+            <div class="milestone-title">Senior Full-Stack AI Engineer</div>
+            <div class="milestone-sub">Leadership · Architecture · Scale</div>
+            <div class="milestone-desc">Lead end-to-end AI product development — from intelligent backends to polished frontends — while mentoring teams and driving innovation at scale.</div>
+            <div class="milestone-badge future">Ahead 🎯</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRENGTHS -->
+<section id="strengths">
+  <div class="section-inner">
+    <div class="section-label">08 — Strengths</div>
+    <h2 class="section-title">What I bring to the <em>table</em></h2>
+    <div class="strengths-grid">
+      <div class="strength-card" data-delay="0">
+        <div class="strength-glow"></div>
+        <div class="strength-icon-wrap"><span class="strength-icon">⚡</span></div>
+        <div class="strength-title">High Learning Agility</div>
+        <div class="strength-desc">Rapidly acquire and apply new frameworks, tools, and paradigms — from zero to production-ready in record time.</div>
+        <div class="strength-bar-wrap"><div class="strength-bar" data-width="95"></div></div>
+      </div>
+      <div class="strength-card" data-delay="100">
+        <div class="strength-glow"></div>
+        <div class="strength-icon-wrap"><span class="strength-icon">🏗️</span></div>
+        <div class="strength-title">Systems Thinking</div>
+        <div class="strength-desc">Design scalable, maintainable architectures that solve real-world problems elegantly — not just working code, but great code.</div>
+        <div class="strength-bar-wrap"><div class="strength-bar" data-width="90"></div></div>
+      </div>
+      <div class="strength-card" data-delay="200">
+        <div class="strength-glow"></div>
+        <div class="strength-icon-wrap"><span class="strength-icon">🤝</span></div>
+        <div class="strength-title">Cross-functional Leadership</div>
+        <div class="strength-desc">Bridge the gap between technical teams and stakeholders. Translate complex AI concepts into clear, actionable insights.</div>
+        <div class="strength-bar-wrap"><div class="strength-bar" data-width="88"></div></div>
+      </div>
+      <div class="strength-card" data-delay="300">
+        <div class="strength-glow"></div>
+        <div class="strength-icon-wrap"><span class="strength-icon">🔬</span></div>
+        <div class="strength-title">Deep Problem Solving</div>
+        <div class="strength-desc">Thrive on complex, ambiguous challenges — breaking down hard problems into structured, solvable components with clarity.</div>
+        <div class="strength-bar-wrap"><div class="strength-bar" data-width="92"></div></div>
+      </div>
+      <div class="strength-card" data-delay="400">
+        <div class="strength-glow"></div>
+        <div class="strength-icon-wrap"><span class="strength-icon">💬</span></div>
+        <div class="strength-title">Mentoring &amp; Knowledge Sharing</div>
+        <div class="strength-desc">Passionate about elevating teammates. Led GenAI KT sessions at Accenture — making complex AI concepts accessible to all.</div>
+        <div class="strength-bar-wrap"><div class="strength-bar" data-width="85"></div></div>
+      </div>
+      <div class="strength-card" data-delay="500">
+        <div class="strength-glow"></div>
+        <div class="strength-icon-wrap"><span class="strength-icon">🎯</span></div>
+        <div class="strength-title">Execution &amp; Ownership</div>
+        <div class="strength-desc">End-to-end ownership mindset — from initial design to deployment and beyond. Accountable for results, not just tasks.</div>
+        <div class="strength-bar-wrap"><div class="strength-bar" data-width="93"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOBBIES -->
+<section id="hobbies">
+  <div class="section-inner">
+    <div class="section-label">09 — Beyond Work</div>
+    <h2 class="section-title">What keeps me <em>alive</em></h2>
+    <div class="hobbies-grid">
+      <div class="hobby-card" data-delay="0">
+        <div class="hobby-bg">🏍️</div>
+        <div class="hobby-content">
+          <div class="hobby-emoji">🏍️</div>
+          <div class="hobby-title">Riding</div>
+          <div class="hobby-desc">Nothing clears the mind like a long ride on an open road. Two wheels, full throttle.</div>
+        </div>
+      </div>
+      <div class="hobby-card" data-delay="80">
+        <div class="hobby-bg">💻</div>
+        <div class="hobby-content">
+          <div class="hobby-emoji">💻</div>
+          <div class="hobby-title">Open Source &amp; Side Projects</div>
+          <div class="hobby-desc">Always tinkering — building AI tools, exploring new frameworks, and contributing to the developer community.</div>
+        </div>
+      </div>
+      <div class="hobby-card" data-delay="160">
+        <div class="hobby-bg">📚</div>
+        <div class="hobby-content">
+          <div class="hobby-emoji">📚</div>
+          <div class="hobby-title">Tech Research</div>
+          <div class="hobby-desc">Following the frontier of AI research — papers, blogs, and podcasts on LLMs, agents, and the future of computing.</div>
+        </div>
+      </div>
+      <div class="hobby-card" data-delay="240">
+        <div class="hobby-bg">🎮</div>
+        <div class="hobby-content">
+          <div class="hobby-emoji">🎮</div>
+          <div class="hobby-title">Gaming</div>
+          <div class="hobby-desc">Strategy games sharpen decision-making. A good match is just a system to optimize — with a lot more fun.</div>
+        </div>
+      </div>
+      <div class="hobby-card" data-delay="320">
+        <div class="hobby-bg">🌄</div>
+        <div class="hobby-content">
+          <div class="hobby-emoji">🌄</div>
+          <div class="hobby-title">Photography</div>
+          <div class="hobby-desc">Capturing moments — from scenic road trips to candid street shots. Visual storytelling through a lens.</div>
+        </div>
+      </div>
+      <div class="hobby-card" data-delay="400">
+        <div class="hobby-bg">🧩</div>
+        <div class="hobby-content">
+          <div class="hobby-emoji">🧩</div>
+          <div class="hobby-title">Problem Solving</div>
+          <div class="hobby-desc">LeetCode grind, algorithm puzzles, system design challenges — sharpening the blade daily.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact">
   <div class="section-inner">
@@ -632,6 +1291,127 @@ const PHOTO_URLS = [];
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
 /* ═══════════════════════════════════════════
+   EXPERIENCE — staggered bullet reveal
+═══════════════════════════════════════════ */
+const expCardObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    e.target.querySelectorAll('.exp-bullet-item').forEach(li => {
+      const d = parseInt(li.dataset.delay || 0);
+      setTimeout(() => li.classList.add('vis'), d + 200);
+    });
+    expCardObs.unobserve(e.target);
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.exp-card').forEach(c => expCardObs.observe(c));
+
+/* ═══════════════════════════════════════════
+   JOURNEY — animated SVG road + milestone reveal
+═══════════════════════════════════════════ */
+(function buildRoad() {
+  const wrap = document.getElementById('journeySvgWrap');
+  if (!wrap) return;
+  wrap.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden;';
+  wrap.innerHTML = `
+  <svg viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet"
+    style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:900px;height:100%;opacity:0.45;"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="rg" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%"   stop-color="#3b82f6" stop-opacity="0.5"/>
+        <stop offset="40%"  stop-color="#06b6d4" stop-opacity="0.35"/>
+        <stop offset="80%"  stop-color="#3b82f6" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.15"/>
+      </linearGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- wide glow road -->
+    <path d="M450,20 C260,120 640,220 450,350 C260,480 640,580 450,690"
+      fill="none" stroke="url(#rg)" stroke-width="48" stroke-linecap="round" opacity="0.18"/>
+    <!-- road edge left -->
+    <path d="M420,20 C230,120 610,220 420,350 C230,480 610,580 420,690"
+      fill="none" stroke="rgba(59,130,246,0.12)" stroke-width="1.5" stroke-dasharray="8 12"/>
+    <!-- road edge right -->
+    <path d="M480,20 C290,120 670,220 480,350 C290,480 670,580 480,690"
+      fill="none" stroke="rgba(59,130,246,0.12)" stroke-width="1.5" stroke-dasharray="8 12"/>
+    <!-- animated centre line -->
+    <path id="roadLine"
+      d="M450,20 C260,120 640,220 450,350 C260,480 640,580 450,690"
+      fill="none" stroke="url(#rg)" stroke-width="2.5"
+      stroke-linecap="round" stroke-dasharray="1000" stroke-dashoffset="1000">
+      <animate attributeName="stroke-dashoffset"
+        from="1000" to="0" dur="2.8s" fill="freeze" begin="0.2s"
+        calcMode="spline" keySplines="0.25 0.1 0.25 1"/>
+    </path>
+    <!-- lane dashes -->
+    <path d="M450,20 C260,120 640,220 450,350 C260,480 640,580 450,690"
+      fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"
+      stroke-dasharray="16 20"/>
+    <!-- milestone markers: B.Tech, Accenture, Agentic, Senior -->
+    <g filter="url(#glow)">
+      <circle cx="450" cy="20"  r="7" fill="#10b981" opacity="0.85"/>
+      <circle cx="352" cy="230" r="7" fill="#10b981" opacity="0.85"/>
+      <circle cx="548" cy="390" r="9" fill="#3b82f6" opacity="1">
+        <animate attributeName="r"       values="7;12;7"   dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="450" cy="690" r="7" fill="#f59e0b" opacity="0.55">
+        <animate attributeName="opacity" values="0.3;0.75;0.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </svg>`;
+
+  // Ensure parent is relatively positioned for SVG to anchor
+  const journeyWrap = wrap.closest('.journey-wrap');
+  if (journeyWrap) journeyWrap.style.position = 'relative';
+})();
+
+const milestoneObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('vis');
+    milestoneObs.unobserve(e.target);
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.milestone').forEach((m, i) => {
+  m.style.transitionDelay = (i * 0.18) + 's';
+  milestoneObs.observe(m);
+});
+
+/* ═══════════════════════════════════════════
+   STRENGTHS — bar fill + card reveal
+═══════════════════════════════════════════ */
+const strengthObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const d = parseInt(e.target.dataset.delay || 0);
+    setTimeout(() => {
+      e.target.classList.add('vis');
+      const bar = e.target.querySelector('.strength-bar');
+      if (bar) bar.style.width = bar.dataset.width + '%';
+    }, d);
+    strengthObs.unobserve(e.target);
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.strength-card').forEach(c => strengthObs.observe(c));
+
+/* ═══════════════════════════════════════════
+   HOBBIES — pop-in reveal
+═══════════════════════════════════════════ */
+const hobbyObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const d = parseInt(e.target.dataset.delay || 0);
+    setTimeout(() => e.target.classList.add('vis'), d);
+    hobbyObs.unobserve(e.target);
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.hobby-card').forEach(c => hobbyObs.observe(c));
+
+/* ═══════════════════════════════════════════
    TECH LOGOS MARQUEE
 ═══════════════════════════════════════════ */
 const LOGOS = [
@@ -681,6 +1461,9 @@ buildLogoTrack();
 /* ═══════════════════════════════════════════
    PHOTO MARQUEE
 ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   PHOTO MARQUEE
+═══════════════════════════════════════════ */
 function buildPhotoMarquee() {
   const wrap1 = document.getElementById('photoWrap1');
   const wrap2 = document.getElementById('photoWrap2');
@@ -724,7 +1507,6 @@ function buildPhotoMarquee() {
   });
 }
 buildPhotoMarquee();
-
 /* ═══════════════════════════════════════════
    FLOATING TECH ICONS CANVAS BACKGROUND
 ═══════════════════════════════════════════ */
