@@ -1,0 +1,9 @@
+Associate Data Practitioner Certification - https://www.credly.com/badges/525534b8-cb7c-4806-a8be-faf9e28e41f4/public_url
+Cloud Digital Leader - https://www.credly.com/badges/c839d0f1-839c-453a-a627-1cfa156a65fe/public_url
+Generative AI Leader - https://www.credly.com/badges/8d5671c7-ca64-44ba-ab7f-ceb1f2be5a09/public_url
+AWS Certified Developer Associate - https://www.credly.com/badges/ecf28463-d269-4c86-8500-2579950b2619/public_url
+AWS Partner: Agentic AI Technical Learning Plan Assessment - Training Badge - https://www.credly.com/badges/fc300c7d-df28-4c11-a00e-e3a85401f0db/public_url
+Databricks Certified Data Engineer Associate - https://credentials.databricks.com/50947422-b059-488b-b8d0-694d9c2017a6#acc.gpCKAe0k
+Associate Cloud Engineer Certification - https://www.credly.com/badges/781b47f1-d81e-4caa-bb06-08537ca339a6/public_url
+Github Copilot - https://learn.microsoft.com/api/credentials/share/en-us/DharmaTejaSunkara-8879/2DF1BC568CD23B90?sharingId=9C353D8448C4447E
+Microsoft Certified: Azure AI Fundamentals - https://learn.microsoft.com/api/credentials/share/en-us/DharmaTejaSunkara-8879/B584595DC41A53BD?sharingId=9C353D8448C4447E
