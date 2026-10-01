@@ -1,0 +1,225 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Add the consolidated CONFIG / DATA block at the top of the `<script>`": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772107915
+      },
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772321287
+      }
+    ],
+    "2.1 Implement `renderCerts()`": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772343266
+      },
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772533934
+      }
+    ],
+    "2.2 Add supporting cert CSS": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772546944
+      },
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772641501
+      }
+    ],
+    "2. Implement the certifications renderer and its supporting CSS": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772641680
+      }
+    ],
+    "3.1 Implement `renderSkills()`": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772656951
+      },
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772790547
+      }
+    ],
+    "3. Implement the skills renderer": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772790748
+      }
+    ],
+    "4.1 Implement `renderProjects()`": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790772808365
+      },
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790773093772
+      }
+    ],
+    "4. Implement the projects renderer": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790773093959
+      }
+    ],
+    "5. Wire the renderer invocations into the load sequence": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790773126063
+      },
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790773362364
+      }
+    ],
+    "6. Convert the Certifications, Skills, and Projects static markup to empty grid containers": [
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790773380963
+      },
+      {
+        "executionId": "70fb7642-217a-435e-bcf9-8a8981c3d20f",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790773534346
+      }
+    ],
+    "7. Checkpoint - verify data-driven sections render": [
+      {
+        "executionId": "4e82397d-3f70-4226-8be5-e02360d3408a",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790773866567
+      },
+      {
+        "executionId": "4e82397d-3f70-4226-8be5-e02360d3408a",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790774499388
+      }
+    ],
+    "8.1 Insert the Publication section markup": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790774618626
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790774810098
+      }
+    ],
+    "8.2 Add Publication CSS": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790774843303
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790774989992
+      }
+    ],
+    "8. Add the new Publication section": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790774990176
+      }
+    ],
+    "9. Fix all section numbering to sequential document order": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790775053693
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790775190682
+      }
+    ],
+    "10. Correct and de-duplicate the Contact social links": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790775205675
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790775322094
+      }
+    ],
+    "11. Refactor EmailJS init and `sendEmail()` to use `EMAILJS_CONFIG`": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790775344451
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790781056441
+      }
+    ],
+    "13. Elevate Gen AI / Agentic AI / Data visual identity": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790781081048
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790781605080
+      }
+    ],
+    "14. CSS cleanup": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790781642174
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790781876969
+      }
+    ],
+    "15. Final checkpoint - manual browser verification against the design checklist": [
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790781885203
+      },
+      {
+        "executionId": "99978a9d-0d94-411b-8c1f-3184b5dc78ed",
+        "chatSessionId": "sess_7ce1ad3d-282b-4491-b415-3c8c6006e716",
+        "timestamp": 1790782912154
+      }
+    ]
+  }
+}

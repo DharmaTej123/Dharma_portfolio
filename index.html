@@ -30,14 +30,18 @@
     cursor: none;
   }
  /* ── RICH MULTI-LAYER BACKGROUND ── */
+  /* background gradients + 40px grid */
   body::before {
     content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
-    background:
+    background-image:
+      linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px),
       radial-gradient(ellipse 80% 60% at 10% 0%,   rgba(139,92,246,0.13) 0%, transparent 60%),
       radial-gradient(ellipse 60% 50% at 90% 10%,  rgba(56,189,248,0.10) 0%, transparent 55%),
       radial-gradient(ellipse 70% 60% at 50% 100%, rgba(244,114,182,0.07) 0%, transparent 60%),
       radial-gradient(ellipse 50% 40% at 80% 60%,  rgba(167,139,250,0.08) 0%, transparent 50%),
       linear-gradient(160deg, #0b0c18 0%, #07080f 40%, #0a0811 100%);
+    background-size: 40px 40px, 40px 40px, auto, auto, auto, auto, auto;
   }
   /* subtle dot grid */
   body::after {
@@ -52,26 +56,48 @@
     background: var(--accent); border-radius: 50%;
     pointer-events: none; z-index: 9999;
     transform: translate(-50%,-50%);
-    transition: width 0.2s, height 0.2s;
-    mix-blend-mode: screen;
+    box-shadow: 0 0 10px rgba(255,138,0,0.9), 0 0 20px rgba(255,138,0,0.55);
+    transition: width 0.18s, height 0.18s, background 0.18s, box-shadow 0.18s;
+  }
+  .cursor.interactive {
+    width: 16px; height: 16px;
+    background: #ffb347;
+    box-shadow: 0 0 14px rgba(255,138,0,1), 0 0 28px rgba(255,138,0,0.7), 0 0 40px rgba(56,189,248,0.6);
   }
   .cursor-ring {
-    position: fixed; width: 36px; height: 36px;
-    border: 1px solid var(--accent); border-radius: 50%;
+    position: fixed; width: 34px; height: 34px;
+    border: 1.5px solid rgba(255,138,0,0.6); border-radius: 50%;
     pointer-events: none; z-index: 9998;
     transform: translate(-50%,-50%);
-    transition: width 0.2s, height 0.2s;
+    box-shadow: 0 0 12px rgba(56,189,248,0.25);
+    transition: width 0.2s, height 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .cursor-ring.interactive {
+    width: 54px; height: 54px;
+    border-color: rgba(56,189,248,0.95);
+    box-shadow: 0 0 20px rgba(56,189,248,0.55), 0 0 10px rgba(244,114,182,0.4);
+  }
+  .cursor-token {
+    position: fixed; z-index: 10000;
+    pointer-events: none;
+    transform: translate(-50%,-50%);
+    font-family: 'DM Mono', monospace; font-size: 9px;
+    color: var(--accent2);
+    opacity: 0; transition: opacity 0.18s ease;
+    text-shadow: 0 0 6px rgba(56,189,248,0.6);
+  }
+  .cursor-token.show { opacity: 0.9; }
+  .cursor-trail {
+    position: fixed; width: 6px; height: 6px;
+    border-radius: 50%;
+    pointer-events: none; z-index: 9997;
+    transform: translate(-50%,-50%);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+  @media (hover: none), (pointer: coarse) {
+    .cursor, .cursor-ring, .cursor-token, .cursor-trail { display: none !important; }
   }
 
-  /* Grid bg */
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none; z-index: 0;
-  }
   /* Floating tech canvas */
   #techCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
 
@@ -164,7 +190,7 @@
 
 .btn-secondary:hover {
 
-  border-color: var(--orange);
+  border-color: var(--accent);
 }
   .hero-visual { flex:0 0 340px; display:flex; flex-direction:column; gap:16px; animation:fadeUp 0.6s 0.5s ease both; }
   .photo-frame { position:relative; border-radius:12px; overflow:hidden; border:1px solid var(--border); aspect-ratio:3/4; max-height:380px; }
@@ -320,11 +346,18 @@
   .skill-tag { padding:4px 10px; background:rgba(6,182,212,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:4px; font-size:0.68rem; color:var(--accent2); letter-spacing:0.05em; transition:background 0.2s,color 0.2s; }
   .skill-tag:hover { background:rgba(59,130,246,0.2); color:var(--text); }
 
+  /* RADAR */
+  .radar-wrap { margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .radar-head { font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.08em; color:var(--muted); text-transform:uppercase; }
+  .radar-canvas { width:100%; max-width:440px; aspect-ratio:1 / 1; height:auto; display:block; }
+
   /* CERTS */
   .certs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
-  .cert-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; display:flex; gap:14px; align-items:flex-start; opacity:0; transform:translateY(16px); transition:opacity 0.4s,transform 0.4s,border-color 0.2s; }
+  .cert-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; display:flex; gap:14px; align-items:flex-start; opacity:0; transform:translateY(16px); transition:opacity 0.4s,transform 0.4s,border-color 0.2s; text-decoration:none; color:inherit; cursor:none; }
   .cert-card.visible { opacity:1; transform:translateY(0); }
   .cert-card:hover { border-color:var(--gold); transform:translateY(-2px); }
+  .cert-card:focus-visible { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+  .cert-badge { width:40px; height:40px; object-fit:contain; flex-shrink:0; }
   .cert-icon { font-size:1.4rem; flex-shrink:0; }
   .cert-name { font-size:0.75rem; line-height:1.5; }
   .cert-issuer { font-size:0.65rem; color:var(--muted); margin-top:4px; letter-spacing:0.08em; }
@@ -341,6 +374,56 @@
   .project-desc { font-size:0.78rem; line-height:1.8; color:#8899bb; margin-bottom:20px; }
   .project-stack { display:flex; flex-wrap:wrap; gap:6px; }
   .stack-tag { padding:3px 8px; background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.2); border-radius:3px; font-size:0.65rem; color:var(--accent2); letter-spacing:0.06em; }
+
+  /* PUBLICATION */
+  .pub-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:36px; display:flex; gap:32px; align-items:flex-start; transition:border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
+  .pub-card:hover { border-color:var(--accent); box-shadow:0 0 12px rgba(255,140,0,0.18), 0 4px 20px rgba(255,140,0,0.08); transform:translateY(-2px); }
+  .pub-body { flex:1; display:flex; flex-direction:column; align-items:flex-start; }
+  .pub-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1.15rem; line-height:1.35; color:var(--text); margin-bottom:14px; }
+  .pub-desc { font-size:0.8rem; line-height:1.8; color:#8899bb; margin-bottom:22px; }
+  .pub-link { display:inline-flex; align-items:center; gap:6px; padding:10px 20px; border:1px solid var(--border); border-radius:6px; font-size:0.72rem; letter-spacing:0.06em; color:var(--accent); text-decoration:none; cursor:none; transition:border-color 0.2s, color 0.2s, opacity 0.2s; }
+  .pub-link:hover { border-color:var(--accent); opacity:0.85; }
+  .pub-link:focus-visible { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+  .pub-media { display:flex; flex-wrap:wrap; gap:16px; flex-shrink:0; }
+  .pub-media img { width:200px; max-width:100%; border-radius:8px; border:1px solid var(--border); object-fit:cover; transition:transform 0.3s ease; }
+  .pub-media img:hover { transform:scale(1.03); }
+  @media(max-width:768px){
+    .pub-card { flex-direction:column; padding:28px; }
+    .pub-media { width:100%; }
+    .pub-media img { flex:1 1 140px; }
+  }
+
+  /* PLAYGROUND */
+  .pg-intro { font-size:0.8rem; color:#8899bb; line-height:1.8; margin-bottom:28px; max-width:640px; }
+  .pg-panel { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:28px; }
+  .pg-pipeline { display:flex; align-items:center; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
+  .pg-stage { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border:1px solid var(--border); border-radius:100px; font-size:0.68rem; color:var(--muted); transition:all 0.25s ease; }
+  .pg-stage-dot { width:8px; height:8px; border-radius:50%; background:var(--muted); transition:all 0.25s ease; flex-shrink:0; }
+  .pg-arrow { color:var(--muted); font-size:0.8rem; }
+  .pg-stage.active { border-color:var(--accent2); color:var(--text); box-shadow:0 0 12px rgba(56,189,248,0.35); }
+  .pg-stage.active .pg-stage-dot { background:var(--accent2); box-shadow:0 0 8px rgba(56,189,248,0.8); animation:pgPulse 1s ease-in-out infinite; }
+  .pg-stage.done { border-color:rgba(56,189,248,0.4); color:var(--text); }
+  .pg-stage.done .pg-stage-dot { background:rgba(56,189,248,0.55); }
+  @keyframes pgPulse { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.5); opacity:0.6; } }
+  .pg-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+  .pg-chip { padding:6px 12px; background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); border-radius:100px; font-size:0.68rem; color:var(--accent2); cursor:none; transition:background 0.2s, color 0.2s; font-family:'DM Mono',monospace; }
+  .pg-chip:hover { background:rgba(56,189,248,0.18); color:var(--text); }
+  .pg-chip:focus-visible { outline:none; box-shadow:0 0 0 2px var(--accent2); }
+  .pg-form { display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
+  .pg-input { flex:1; min-width:200px; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px 14px; color:var(--text); font-family:'DM Mono',monospace; font-size:0.8rem; outline:none; transition:border-color 0.2s, box-shadow 0.2s; }
+  .pg-input:focus { border-color:var(--accent2); box-shadow:0 0 0 3px rgba(56,189,248,0.15); }
+  .pg-ask { padding:12px 18px; background:var(--accent); color:#111; border:none; border-radius:8px; font-family:'DM Mono',monospace; font-size:0.78rem; cursor:none; font-weight:bold; transition:transform 0.15s ease, filter 0.15s ease; }
+  .pg-ask:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .pg-ask:disabled { opacity:0.5; }
+  .pg-output { min-height:72px; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:14px 16px; font-size:0.8rem; line-height:1.7; color:var(--text); }
+  .pg-output:empty::before { content:'Answers stream in here. Try a question chip above.'; color:var(--muted); opacity:0.7; }
+  .pg-answer { white-space:pre-wrap; }
+  .pg-source { font-size:0.68rem; color:var(--muted); margin-top:8px; letter-spacing:0.04em; }
+  @media(max-width:600px){
+    .pg-form { flex-direction:column; }
+    .pg-input { width:100%; min-width:0; }
+    .pg-ask { width:100%; }
+  }
 
   /* EDUCATION */
   /* .edu-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:36px; display:flex; gap:32px; align-items:flex-start; max-width:680px; transition:border-color 0.2s; }
@@ -423,8 +506,32 @@
   .back-to-top:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-3px); }
 
   /* TYPED */
-  .typed-cursor { display:inline-block; width:2px; height:0.85em; background:var(--accent); margin-left:2px; vertical-align:middle; animation:blink 0.9s step-end infinite; }
+  .typed-cursor { display:inline-block; width:0.55em; height:1em; background:var(--accent); border-radius:1px; margin-left:2px; vertical-align:text-bottom; animation:blink 0.9s step-end infinite; }
   @keyframes blink{50%{opacity:0}}
+
+  /* GEN LABEL */
+  .gen-label { display:inline-block; font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.18em; color:var(--muted); text-transform:uppercase; opacity:0; transition:opacity 0.4s ease; margin-bottom:6px; }
+  .gen-label.show { opacity:0.7; }
+
+  /* AI CHAT WIDGET */
+  .ai-chat { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px; font-family:'DM Mono',monospace; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.35); margin-bottom:16px; min-height:150px; }
+  .ai-chat-head { display:flex; align-items:center; gap:6px; padding-bottom:10px; margin-bottom:10px; border-bottom:1px solid var(--border); }
+  .ai-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .ai-dot:nth-child(1){ background:#ff5f56; }
+  .ai-dot:nth-child(2){ background:#ffbd2e; }
+  .ai-dot:nth-child(3){ background:#27c93f; }
+  .ai-chat-title { color:var(--muted); font-size:0.62rem; letter-spacing:0.1em; margin-left:6px; }
+  .ai-chat-model { margin-left:auto; font-size:0.55rem; letter-spacing:0.08em; color:var(--accent2); background:rgba(56,189,248,0.1); border-radius:20px; padding:2px 8px; }
+  .ai-chat-body { display:flex; flex-direction:column; }
+  .ai-msg { display:block; font-size:0.72rem; line-height:1.6; margin:6px 0; padding:8px 10px; border-radius:8px; word-break:normal; }
+  .ai-msg.user { color:var(--accent); }
+  .ai-msg.user::before { content:'> '; color:var(--accent); }
+  .ai-msg.assistant { background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.15); color:var(--text); }
+  .ai-typing { display:inline-flex; gap:4px; align-items:center; }
+  .ai-typing span { width:6px; height:6px; border-radius:50%; background:var(--accent2); display:inline-block; animation:aiBounce 1.2s ease-in-out infinite; }
+  .ai-typing span:nth-child(2){ animation-delay:0.2s; }
+  .ai-typing span:nth-child(3){ animation-delay:0.4s; }
+  @keyframes aiBounce{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-4px);opacity:1}}
 
   /* FOOTER */
   footer { text-align:center; padding:32px; border-top:1px solid var(--border); font-size:0.65rem; color:var(--muted); letter-spacing:0.1em; position:relative; z-index:1; }
@@ -444,94 +551,6 @@
   }
 
   /* ── JOURNEY ROADMAP ── */
-  /* .journey-wrap { position:relative; }
-  .journey-milestones {
-    display:flex; flex-direction:column; gap:0;
-    position:relative; padding:20px 0;
-  }
-  .journey-milestones::before {
-    content:'';
-    position:absolute; left:50%; top:0; bottom:0; width:2px;
-    background:linear-gradient(to bottom, var(--accent), rgba(59,130,246,0.1));
-    transform:translateX(-50%);
-  }
-
-  .milestone {
-    display:grid; grid-template-columns:1fr 60px 1fr;
-    align-items:start; gap:0; padding:0 0 56px;
-    opacity:0; transform:translateY(24px);
-    transition:opacity 0.6s ease, transform 0.6s ease;
-  }
-  .milestone.vis { opacity:1; transform:translateY(0); }
-  .milestone.right-side .milestone-node { grid-column:2; }
-
-  .milestone-node {
-    grid-column:2; grid-row:1;
-    width:52px; height:52px;
-    background:var(--surface);
-    border:2px solid var(--accent);
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.3rem;
-    position:relative; z-index:2;
-    box-shadow:0 0 0 6px rgba(59,130,246,0.1), 0 0 20px rgba(59,130,246,0.3);
-    transition:box-shadow 0.3s, transform 0.3s;
-    align-self:center;
-  }
-  .milestone:hover .milestone-node { transform:scale(1.1); box-shadow:0 0 0 8px rgba(59,130,246,0.15), 0 0 32px rgba(59,130,246,0.5); }
-
-  .current-node {
-    background:var(--accent);
-    box-shadow:0 0 0 6px rgba(59,130,246,0.2), 0 0 28px rgba(59,130,246,0.6) !important;
-    animation:nodePulse 2.5s ease-in-out infinite;
-  }
-  @keyframes nodePulse {
-    0%,100% { box-shadow:0 0 0 6px rgba(59,130,246,0.2), 0 0 28px rgba(59,130,246,0.5); }
-    50%      { box-shadow:0 0 0 12px rgba(59,130,246,0.08), 0 0 44px rgba(59,130,246,0.7); }
-  }
-  .future-node { border-color:rgba(59,130,246,0.35); opacity:0.65; }
-
-  .milestone-card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:12px; padding:22px 24px;
-    transition:border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    position:relative; overflow:hidden;
-  }
-  .milestone-card::before {
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(135deg, rgba(59,130,246,0.04), transparent);
-    opacity:0; transition:opacity 0.3s;
-  }
-  .milestone:hover .milestone-card { border-color:rgba(59,130,246,0.35); box-shadow:0 6px 30px rgba(59,130,246,0.1); }
-  .milestone:hover .milestone-card::before { opacity:1; }
-  .milestone-card.left  { grid-column:1; margin-right:24px; }
-  .milestone-card.right { grid-column:3; margin-left:24px; }
-  .milestone.right-side .milestone-card.right { grid-column:3; }
-
-  .current-card { border-color:rgba(59,130,246,0.35) !important; box-shadow:0 4px 24px rgba(59,130,246,0.12) !important; }
-  .future-card  { opacity:0.75; border-style:dashed; }
-
-  .milestone-year { font-size:0.65rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
-  .milestone-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; margin-bottom:4px; }
-  .milestone-sub { font-size:0.72rem; color:var(--muted); margin-bottom:12px; }
-  .milestone-desc { font-size:0.77rem; line-height:1.75; color:#8899bb; margin-bottom:14px; }
-  .milestone-badge {
-    display:inline-flex; align-items:center; gap:6px;
-    padding:4px 12px; border-radius:100px;
-    font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase;
-  }
-  .milestone-badge.done    { background:rgba(16,185,129,0.1);  border:1px solid rgba(16,185,129,0.3);  color:#10b981; }
-  .milestone-badge.current { background:rgba(59,130,246,0.1);  border:1px solid rgba(59,130,246,0.35); color:var(--accent); }
-  .milestone-badge.future  { background:rgba(245,158,11,0.1);  border:1px solid rgba(245,158,11,0.3);  color:var(--gold); }
-
-  @media(max-width:768px) {
-    .journey-milestones::before { left:26px; }
-    .milestone, .milestone.right-side { grid-template-columns:52px 1fr; gap:0; }
-    .milestone-node, .milestone.right-side .milestone-node { grid-column:1; grid-row:1; }
-    .milestone-card.left, .milestone-card.right, .milestone.right-side .milestone-card.right {
-      grid-column:2; margin-left:16px; margin-right:0;
-    }
-  } */
   .journey-wrap { position:relative; }
   .journey-milestones {
     display:flex; flex-direction:column; gap:0;
@@ -807,6 +826,7 @@
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-token" id="cursorToken">▮</div>
 
 <nav>
   <a class="nav-logo" href="#"><span>DT</span>S</a>
@@ -823,11 +843,12 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge">Available for Opportunities</div>
+    <div class="hero-badge">Gen AI · Agentic AI · Data — Available for Opportunities</div>
     <h1 class="hero-name">
       Dharma Teja<br>
       <span class="line2">Sunkara</span>
     </h1>
+    <span id="genLabel" class="gen-label">▮ generating…</span>
     <p class="hero-title" id="heroTitle">AI Software Engineer · Agentic AI · Multi-Agent Systems</p>
     <p class="hero-desc">
       Building production-ready Agentic AI systems that bridge business needs and modern AI capabilities. Specializing in LangGraph, LangChain, RAG, FastAPI, and multi-agent orchestration across AWS, Azure and GCP.
@@ -838,6 +859,14 @@
     </div>
   </div>
   <div class="hero-visual">
+    <div class="ai-chat" id="aiChat" aria-hidden="true">
+      <div class="ai-chat-head">
+        <span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span>
+        <span class="ai-chat-title">dharma-assistant</span>
+        <span class="ai-chat-model">gpt-dharma-1</span>
+      </div>
+      <div class="ai-chat-body" id="aiChatBody"></div>
+    </div>
     <div class="photo-frame">
       <img src="Dharma_img4.jpeg" alt="Dharma Teja Sunkara"
         onerror="this.style.display='none';this.parentElement.style.cssText='background:#0c1120;display:flex;align-items:center;justify-content:center;aspect-ratio:3/4;max-height:380px;border-radius:12px;border:1px solid #1a2340';this.parentElement.innerHTML='<div style=\'font-family:Syne,sans-serif;font-size:4rem;font-weight:800;color:#1a2340\'>DT</div>'">
@@ -857,6 +886,12 @@
   <div class="logos-track-wrap" id="logosWrap"></div>
 </div>
 
+<!-- AI STACK LOGOS MARQUEE -->
+<div class="stack-logos-section">
+  <div class="stack-logos-label">AI Stack</div>
+  <div class="logos-track-wrap" id="aiLogosWrap"></div>
+</div>
+
 <!-- PHOTO MARQUEE -->
 <section class="photo-marquee-section" id="gallery">
   <div class="photo-marquee-label">Gallery</div>
@@ -865,6 +900,7 @@
 </section>
 
 <!-- EXPERIENCE -->
+<!-- SECTION ORDER: section-label numbers must stay sequential (01..NN) in document order. When inserting a new section, renumber the labels that follow it. -->
 <section id="experience">
   <div class="section-inner">
     <div class="section-label">01 — Experience</div>
@@ -930,49 +966,10 @@
   <div class="section-inner">
     <div class="section-label">02 — Skills</div>
     <h2 class="section-title">The <em>toolkit</em></h2>
-    <div class="skills-grid">
-      <div class="skill-group">
-        <div class="skill-group-icon">🤖</div>
-        <div class="skill-group-title">AI &amp; Agentic</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Agentic AI</span><span class="skill-tag">LangGraph</span><span class="skill-tag">LangChain</span>
-          <span class="skill-tag">Multi-Agent Systems</span><span class="skill-tag">OpenAI</span><span class="skill-tag">Claude</span>
-          <span class="skill-tag">RAG</span><span class="skill-tag">MCP</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-icon">⚙️</div>
-        <div class="skill-group-title">Backend &amp; Engineering</div>
-        <div class="skill-tags">
-          <span class="skill-tag">FastAPI</span><span class="skill-tag">Python</span><span class="skill-tag">Java</span>
-          <span class="skill-tag">Spring Boot</span><span class="skill-tag">Hibernate</span><span class="skill-tag">SQLAlchemy</span>
-          <span class="skill-tag">Pydantic</span><span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span>
-          <span class="skill-tag">SQL</span><span class="skill-tag">Git</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-icon">☁️</div>
-        <div class="skill-group-title">Cloud</div>
-        <div class="skill-tags">
-          <span class="skill-tag">AWS</span><span class="skill-tag">Google Cloud</span><span class="skill-tag">Azure</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-icon">🗄️</div>
-        <div class="skill-group-title">Databases</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Neo4j</span><span class="skill-tag">ChromaDB</span><span class="skill-tag">PostgreSQL</span>
-          <span class="skill-tag">pgvector</span><span class="skill-tag">Google Spanner</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-icon">🎯</div>
-        <div class="skill-group-title">Engineering Excellence</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Prompt Engineering</span><span class="skill-tag">LLM Evaluation</span>
-          <span class="skill-tag">Context Engineering</span><span class="skill-tag">Code Review</span>
-        </div>
-      </div>
+    <div class="skills-grid"><!-- populated by renderSkills() --></div>
+    <div class="radar-wrap">
+      <div class="radar-head">AI competency radar</div>
+      <canvas id="radarChart" class="radar-canvas" role="img" aria-label="Radar chart of AI competencies"></canvas>
     </div>
   </div>
 </section>
@@ -982,30 +979,48 @@
   <div class="section-inner">
     <div class="section-label">03 — Projects</div>
     <h2 class="section-title">Things I've <em>shipped</em></h2>
-    <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-num">01</div>
-        <div class="project-name">YouTube Channel Q&amp;A Assistant</div>
-        <div class="project-desc">AI-based web application that accepts a YouTube channel URL, processes video content, and enables natural-language Q&amp;A. Features transcript extraction, semantic search, and source-based answer generation.</div>
-        <div class="project-stack">
-          <span class="stack-tag">RAG</span><span class="stack-tag">Semantic Search</span><span class="stack-tag">LangChain</span><span class="stack-tag">Python</span>
-        </div>
+    <div class="projects-grid"><!-- populated by renderProjects() --></div>
+  </div>
+</section>
+
+<!-- PLAYGROUND (mini RAG / agent) -->
+<section id="playground">
+  <div class="section-inner">
+    <div class="section-label">04 — Ask my portfolio</div>
+    <h2 class="section-title">Ask the <em>agent</em></h2>
+    <p class="pg-intro">A tiny offline agent that retrieves answers from this portfolio's own data. Pick a question or type your own — watch the pipeline work.</p>
+    <div class="pg-panel">
+      <div class="pg-pipeline" id="pgPipeline" aria-hidden="true">
+        <div class="pg-stage" data-stage="classify"><span class="pg-stage-dot"></span><span class="pg-stage-name">Classifier</span></div>
+        <div class="pg-arrow">→</div>
+        <div class="pg-stage" data-stage="retrieve"><span class="pg-stage-dot"></span><span class="pg-stage-name">Retriever</span></div>
+        <div class="pg-arrow">→</div>
+        <div class="pg-stage" data-stage="respond"><span class="pg-stage-dot"></span><span class="pg-stage-name">Responder</span></div>
       </div>
-      <div class="project-card">
-        <div class="project-num">02</div>
-        <div class="project-name">Inventory Management System</div>
-        <div class="project-desc">Full-stack academic project with user authentication and product management. Built with a React frontend and Spring Boot backend backed by MySQL.</div>
-        <div class="project-stack">
-          <span class="stack-tag">React</span><span class="stack-tag">Spring Boot</span><span class="stack-tag">MySQL</span><span class="stack-tag">HTML/CSS/JS</span>
-        </div>
+      <div class="pg-chips" id="pgChips"><!-- chips injected by JS --></div>
+      <form class="pg-form" id="pgForm" autocomplete="off">
+        <input type="text" id="pgInput" class="pg-input" placeholder="Ask about skills, projects, certifications, clouds…" aria-label="Ask a question">
+        <button type="submit" class="pg-ask" id="pgAsk">Ask ↵</button>
+      </form>
+      <div class="pg-output" id="pgOutput" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATION -->
+<section id="publications">
+  <div class="section-inner">
+    <div class="section-label">05 — Publication</div>
+    <h2 class="section-title">Published <em>research</em></h2>
+    <div class="pub-card">
+      <div class="pub-body">
+        <h3 class="pub-title">Face Recognition with Liveness Detection using Computer Vision: Enhancing Security in Biometric Systems</h3>
+        <p class="pub-desc">A college final-year research project that strengthens face recognition through integrated liveness detection — combining deep-learning facial feature extraction with real-time analysis of physiological signals to fortify biometric authentication against spoofing and fraud.</p>
+        <a class="pub-link" href="https://drive.google.com/file/d/1NISEe9m5vZHm8w9qIGDh5BAsLy7ILX3T/view" target="_blank" rel="noopener">Read the paper ↗</a>
       </div>
-      <div class="project-card">
-        <div class="project-num">03</div>
-        <div class="project-name">Legacy Code Modernization Agent</div>
-        <div class="project-desc">Multi-agent framework at Accenture automating legacy code transformation. Generates call graphs, dependency mappings, and business rules using LangGraph stateful workflows with hybrid memory storage.</div>
-        <div class="project-stack">
-          <span class="stack-tag">LangGraph</span><span class="stack-tag">Neo4j</span><span class="stack-tag">ChromaDB</span><span class="stack-tag">FastAPI</span><span class="stack-tag">AWS/GCP/Azure</span>
-        </div>
+      <div class="pub-media">
+        <img src="FRLD_demo.jpg" alt="Face recognition liveness detection demo" onerror="this.style.display='none'">
+        <img src="Publication_certificate.jpg" alt="Publication certificate" onerror="this.style.display='none'">
       </div>
     </div>
   </div>
@@ -1014,24 +1029,16 @@
 <!-- CERTIFICATIONS -->
 <section id="certs">
   <div class="section-inner">
-    <div class="section-label">04 — Certifications</div>
+    <div class="section-label">06 — Certifications</div>
     <h2 class="section-title">Credentials &amp; <em>recognition</em></h2>
-    <div class="certs-grid">
-      <div class="cert-card"><div class="cert-icon">☁️</div><div><div class="cert-name">Microsoft Certified: Azure AI Fundamentals</div><div class="cert-issuer">Microsoft · ID 996661609</div></div></div>
-      <div class="cert-card"><div class="cert-icon">🌐</div><div><div class="cert-name">Google Cloud Generative AI Leader</div><div class="cert-issuer">Google Cloud</div></div></div>
-      <div class="cert-card"><div class="cert-icon">🔧</div><div><div class="cert-name">GCP Associate Cloud Engineer</div><div class="cert-issuer">Google Cloud</div></div></div>
-      <div class="cert-card"><div class="cert-icon">🧱</div><div><div class="cert-name">Databricks Certified Data Engineer Associate</div><div class="cert-issuer">Databricks</div></div></div>
-      <div class="cert-card"><div class="cert-icon">📊</div><div><div class="cert-name">Google Associate Data Practitioner</div><div class="cert-issuer">Google</div></div></div>
-      <div class="cert-card"><div class="cert-icon">🚀</div><div><div class="cert-name">Google Cloud Digital Leader</div><div class="cert-issuer">Google Cloud</div></div></div>
-      <div class="cert-card"><div class="cert-icon">🤖</div><div><div class="cert-name">GitHub Copilot (GH-300)</div><div class="cert-issuer">GitHub</div></div></div>
-    </div>
+    <div class="certs-grid"><!-- populated by renderCerts() --></div>
   </div>
 </section>
 
 <!-- EDUCATION -->
 <section id="education">
   <div class="section-inner">
-    <div class="section-label">05 — Education</div>
+    <div class="section-label">07 — Education</div>
     <h2 class="section-title">Where it <em>started</em></h2>
     <div class="edu-card">
       <div class="edu-year">2020 – 2024</div>
@@ -1048,7 +1055,7 @@
 <!-- MY JOURNEY -->
 <section id="journey">
   <div class="section-inner">
-    <div class="section-label">07 — Journey</div>
+    <div class="section-label">08 — Journey</div>
     <h2 class="section-title">The <em>road</em> so far</h2>
     <div class="journey-wrap">
       <!-- SVG curved road is injected by JS -->
@@ -1116,7 +1123,7 @@
 <!-- STRENGTHS -->
 <section id="strengths">
   <div class="section-inner">
-    <div class="section-label">08 — Strengths</div>
+    <div class="section-label">09 — Strengths</div>
     <h2 class="section-title">What I bring to the <em>table</em></h2>
     <div class="strengths-grid">
       <div class="strength-card" data-delay="0">
@@ -1168,7 +1175,7 @@
 <!-- HOBBIES -->
 <section id="hobbies">
   <div class="section-inner">
-    <div class="section-label">09 — Beyond Work</div>
+    <div class="section-label">10 — Beyond Work</div>
     <h2 class="section-title">What keeps me <em>alive</em></h2>
     <div class="hobbies-grid">
       <div class="hobby-card" data-delay="0">
@@ -1226,7 +1233,7 @@
 <!-- CONTACT -->
 <section id="contact">
   <div class="section-inner">
-    <div class="section-label">06 — Contact</div>
+    <div class="section-label">11 — Contact</div>
     <h2 class="section-title">Let's <em>connect</em></h2>
     <div class="contact-grid">
       <div class="contact-info">
@@ -1238,10 +1245,11 @@
           <div class="contact-detail-item"><span>⚡</span><span>Usually responds within 24h</span></div>
         </div>
         <div class="social-links" style="margin-top:28px">
-          <a href="https://linkedin.com" target="_blank" class="social-link">LinkedIn</a>
-          <a href="https://github.com" target="_blank" class="social-link">GitHub</a>
-          <a href="https://leetcode.com" target="_blank" class="social-link">LeetCode</a>
-          <a href="https://credly.com" target="_blank" class="social-link">Credly</a>
+          <a href="https://www.linkedin.com/in/dharma-teja-sunkara-0704b5226" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
+          <a href="https://github.com/DharmaTej123" target="_blank" rel="noopener" class="social-link">GitHub</a>
+          <a href="https://www.credly.com/users/dharma-teja-sunkara/badges/credly" target="_blank" rel="noopener" class="social-link">Credly</a>
+          <!-- TODO(maintainer): replace with the owner's real LeetCode profile URL when available -->
+          <a href="https://leetcode.com" target="_blank" rel="noopener" class="social-link">LeetCode</a>
         </div>
       </div>
       <div class="contact-form-wrap">
@@ -1272,23 +1280,172 @@
 <button id="backToTop" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <footer>
-  <p>DHARMA TEJA SUNKARA &nbsp;·&nbsp; AI ENGINEER &nbsp;·&nbsp; HYDERABAD, INDIA &nbsp;·&nbsp; MMXXVI</p>
+  <p>DHARMA TEJA SUNKARA &nbsp;·&nbsp; GEN AI &nbsp;·&nbsp; AGENTIC AI &nbsp;·&nbsp; DATA &nbsp;·&nbsp; HYDERABAD, INDIA &nbsp;·&nbsp; MMXXVI</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 /* ═══════════════════════════════════════════
-   CONFIG — update these before deploying
+   CONFIG / DATA — edit site content here
+   ─────────────────────────────────────────
+   SECURITY NOTE (EmailJS): The public key below is a *publishable*
+   client key and is visible to anyone who views this page's source.
+   This is expected for EmailJS browser usage. Mitigation: in the
+   EmailJS dashboard, restrict sending to an allow-list of domains
+   (Account → Security → Allowed Origins) so the key cannot be abused
+   from other sites. Do NOT place private/API keys in this file.
 ═══════════════════════════════════════════ */
-const EMAILJS_PUBLIC_KEY  = 'zc-29wzrNwAE9hF2q';
-const EMAILJS_SERVICE_ID  = 'service_l9ood5i';
-const EMAILJS_TEMPLATE_ID = 'template_29hiige';
+const EMAILJS_CONFIG = {
+  publicKey:  'zc-29wzrNwAE9hF2q',
+  serviceId:  'service_l9ood5i',
+  templateId: 'template_29hiige',
+  toEmail:    'sunkaradharmateja1729@gmail.com',
+};
+
+// Treats an empty publicKey or the 'YOUR_PUBLIC_KEY' placeholder sentinel as unconfigured.
+function isEmailJSConfigured(cfg){
+  const k = (cfg && cfg.publicKey || '').trim();
+  return k !== '' && k !== 'YOUR_PUBLIC_KEY';
+}
+
+/* ─────────────────────────────────────────
+   CERTIFICATIONS — { name, issuer, url, img }
+   Two entries are PDF-backed (github_copilot.pdf, Azure_Fundamentals.pdf):
+   the image load fails and the fallback glyph renders, anchor stays clickable.
+   The AWS Partner filename contains a literal space and "(1)" — kept exactly
+   as it exists on disk so the browser resolves it.
+───────────────────────────────────────── */
+const CERTS = [
+  {
+    name:   'Associate Data Practitioner',
+    issuer: 'Google Cloud',
+    url:    'https://www.credly.com/badges/525534b8-cb7c-4806-a8be-faf9e28e41f4/public_url',
+    img:    'certificates/associate-data-practitioner-certification.png',
+  },
+  {
+    name:   'Cloud Digital Leader',
+    issuer: 'Google Cloud',
+    url:    'https://www.credly.com/badges/c839d0f1-839c-453a-a627-1cfa156a65fe/public_url',
+    img:    'certificates/cloud-digital-leader-certification.png',
+  },
+  {
+    name:   'Generative AI Leader',
+    issuer: 'Google Cloud',
+    url:    'https://www.credly.com/badges/8d5671c7-ca64-44ba-ab7f-ceb1f2be5a09/public_url',
+    img:    'certificates/generative-ai-leader-certification.png',
+  },
+  {
+    name:   'AWS Certified Developer – Associate',
+    issuer: 'Amazon Web Services',
+    url:    'https://www.credly.com/badges/ecf28463-d269-4c86-8500-2579950b2619/public_url',
+    img:    'certificates/aws-certified-developer-associate.png',
+  },
+  {
+    name:   'AWS Partner: Agentic AI Technical Learning Plan Assessment',
+    issuer: 'Amazon Web Services',
+    url:    'https://www.credly.com/badges/fc300c7d-df28-4c11-a00e-e3a85401f0db/public_url',
+    img:    'certificates/aws-partner-agentic-ai-technical-learning-plan-asse (1).png',
+  },
+  {
+    name:   'Databricks Certified Data Engineer – Associate',
+    issuer: 'Databricks',
+    url:    'https://credentials.databricks.com/50947422-b059-488b-b8d0-694d9c2017a6#acc.gpCKAe0k',
+    img:    'certificates/Databricks_DE_Associate.png',
+  },
+  {
+    name:   'Associate Cloud Engineer',
+    issuer: 'Google Cloud',
+    url:    'https://www.credly.com/badges/781b47f1-d81e-4caa-bb06-08537ca339a6/public_url',
+    img:    'certificates/associate-cloud-engineer-certification.png',
+  },
+  {
+    name:   'GitHub Copilot (GH-300)',
+    issuer: 'GitHub / Microsoft',
+    url:    'https://learn.microsoft.com/api/credentials/share/en-us/DharmaTejaSunkara-8879/2DF1BC568CD23B90?sharingId=9C353D8448C4447E',
+    img:    'certificates/github_copilot.pdf',
+  },
+  {
+    name:   'Microsoft Certified: Azure AI Fundamentals',
+    issuer: 'Microsoft',
+    url:    'https://learn.microsoft.com/api/credentials/share/en-us/DharmaTejaSunkara-8879/B584595DC41A53BD?sharingId=9C353D8448C4447E',
+    img:    'certificates/Azure_Fundamentals.pdf',
+  },
+];
+
+/* ─────────────────────────────────────────
+   SKILLS — [{ icon, title, tags: [...] }]
+   Transcribed verbatim from the current #skills markup.
+───────────────────────────────────────── */
+const SKILLS = [
+  {
+    icon: '🤖',
+    title: 'AI & Agentic',
+    tags: ['Agentic AI', 'LangGraph', 'LangChain', 'Multi-Agent Systems', 'OpenAI', 'Claude', 'RAG', 'MCP'],
+  },
+  {
+    icon: '⚙️',
+    title: 'Backend & Engineering',
+    tags: ['FastAPI', 'Python', 'Java', 'Spring Boot', 'Hibernate', 'SQLAlchemy', 'Pydantic', 'NumPy', 'Pandas', 'SQL', 'Git'],
+  },
+  {
+    icon: '☁️',
+    title: 'Cloud',
+    tags: ['AWS', 'Google Cloud', 'Azure'],
+  },
+  {
+    icon: '🗄️',
+    title: 'Databases',
+    tags: ['Neo4j', 'ChromaDB', 'PostgreSQL', 'pgvector', 'Google Spanner'],
+  },
+  {
+    icon: '🎯',
+    title: 'Engineering Excellence',
+    tags: ['Prompt Engineering', 'LLM Evaluation', 'Context Engineering', 'Code Review'],
+  },
+];
+
+/* ─────────────────────────────────────────
+   PROJECTS — { name, desc, tags: [...] } — NEW FIRST
+   Numbering is derived from array index by the renderer.
+───────────────────────────────────────── */
+const PROJECTS = [
+  {
+    name: 'DocuMind – Multi-Agent Document Intelligence Platform',
+    desc: 'A multi-agent document intelligence platform with LangGraph-orchestrated agents for ingestion, retrieval, and answer synthesis over unstructured documents, using a production RAG pipeline with pgvector storage, Cohere Rerank for retrieval quality, and RAGAS with LangSmith for automated evaluation and tracing.',
+    tags: ['FastAPI', 'LangGraph', 'pgvector', 'Cohere Rerank', 'RAGAS', 'LangSmith', 'Docker'],
+  },
+  {
+    name: 'LoopDesk — Multi-Agent Customer Support System with Human-in-the-Loop Escalation',
+    desc: 'A production-style agentic support platform on LangGraph orchestrating a Classifier/Intake → Retriever → Responder → Critic → Reviser → Escalation-Router agent graph, a live human-approval queue for risk-flagged tickets, a critic/reviser loop capped at two revisions that catches policy violations, hybrid pgvector plus Postgres full-text search fused via RRF with a pluggable reranker, hard non-LLM guardrails that unconditionally escalate refund and legal tickets, knowledge-base search and ticket CRUD via an MCP server, state persistence via a LangGraph Postgres checkpointer, and evaluation via a category/escalation harness plus RAGAS metrics visualized in a generated metrics dashboard.',
+    tags: ['LangGraph', 'LangChain', 'MCP', 'Anthropic API', 'pgvector', 'PostgreSQL', 'SQLAlchemy/Alembic', 'RAGAS', 'FastAPI', 'Next.js/TypeScript/Tailwind', 'Voyage AI', 'JWT auth', 'Docker'],
+  },
+  {
+    name: 'RepoSage — Codebase Onboarding & Tech-Debt Copilot',
+    desc: 'An evidence-first multi-agent system that autonomously analyzes GitHub repositories for architecture, dependencies, code ownership, test coverage, and technical debt, coordinates specialized agents through LangGraph to investigate a codebase, validates findings against source evidence, prioritizes risks, generates onboarding documentation, and provides an interactive copilot for evidence-backed questions.',
+    tags: ['Python', 'LangGraph', 'LangChain', 'FastAPI', 'Neo4j', 'PostgreSQL', 'pgvector', 'Redis', 'Docker', 'GitPython', 'OSV/PyPI APIs', 'React', 'LLMs/RAG'],
+  },
+  {
+    name: 'YouTube Channel Q&A Assistant',
+    desc: 'AI-based web application that accepts a YouTube channel URL, processes video content, and enables natural-language Q&A. Features transcript extraction, semantic search, and source-based answer generation.',
+    tags: ['RAG', 'Semantic Search', 'LangChain', 'Python'],
+  },
+  {
+    name: 'Inventory Management System',
+    desc: 'Full-stack academic project with user authentication and product management. Built with a React frontend and Spring Boot backend backed by MySQL.',
+    tags: ['React', 'Spring Boot', 'MySQL', 'HTML/CSS/JS'],
+  },
+  {
+    name: 'Legacy Code Modernization Agent',
+    desc: 'Multi-agent framework at Accenture automating legacy code transformation. Generates call graphs, dependency mappings, and business rules using LangGraph stateful workflows with hybrid memory storage.',
+    tags: ['LangGraph', 'Neo4j', 'ChromaDB', 'FastAPI', 'AWS/GCP/Azure'],
+  },
+];
 
 // ADD YOUR PHOTO URLS HERE (can be local paths or hosted URLs)
 // e.g. ['./photo1.jpg', './photo2.jpg', 'https://i.imgur.com/abc.jpg']
 const PHOTO_URLS = [];
 
-emailjs.init(EMAILJS_PUBLIC_KEY);
+if (isEmailJSConfigured(EMAILJS_CONFIG)) emailjs.init(EMAILJS_CONFIG.publicKey);
 
 /* ═══════════════════════════════════════════
    EXPERIENCE — staggered bullet reveal
@@ -1441,13 +1598,34 @@ const LOGOS = [
   { name:'Databricks',  img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/databricks.svg' },
 ];
 
-function buildLogoTrack() {
-  const wrap = document.getElementById('logosWrap');
+const AI_LOGOS = [
+  { name:'LangChain',    img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/langchain.svg' },
+  { name:'LangGraph',    img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/langgraph.svg' },
+  { name:'OpenAI',       img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg' },
+  { name:'Anthropic',    img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg' },
+  { name:'Hugging Face', img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/huggingface.svg' },
+  { name:'Ollama',       img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/ollama.svg' },
+  { name:'PyTorch',      img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/pytorch.svg' },
+  { name:'TensorFlow',   img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tensorflow.svg' },
+  { name:'Keras',        img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/keras.svg' },
+  { name:'scikit-learn', img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/scikitlearn.svg' },
+  { name:'Jupyter',      img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/jupyter.svg' },
+  { name:'Streamlit',    img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/streamlit.svg' },
+  { name:'Qdrant',       img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/qdrant.svg' },
+  { name:'Mistral AI',   img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/mistralai.svg' },
+  { name:'Google Gemini',img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/googlegemini.svg' },
+  { name:'n8n',          img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/n8n.svg' },
+  { name:'Apache Spark', img:'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/apachespark.svg' },
+];
+
+function buildLogoTrack(data, wrapId) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
   // duplicate for seamless loop
   [0,1].forEach(i => {
     const track = document.createElement('div');
     track.className = 'logos-track';
-    LOGOS.forEach(l => {
+    data.forEach(l => {
       const pill = document.createElement('div');
       pill.className = 'logo-pill';
       pill.innerHTML = `<img src="${l.img}" alt="${l.name}" onerror="this.style.display='none'"><span>${l.name}</span>`;
@@ -1456,7 +1634,313 @@ function buildLogoTrack() {
     wrap.appendChild(track);
   });
 }
-buildLogoTrack();
+buildLogoTrack(LOGOS, 'logosWrap');
+buildLogoTrack(AI_LOGOS, 'aiLogosWrap');
+
+/* ═══════════════════════════════════════════
+   AI COMPETENCY RADAR CHART
+═══════════════════════════════════════════ */
+(function initRadarChart() {
+  const canvas = document.getElementById('radarChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const COMPETENCIES = [
+    { label: 'Agentic AI',            value: 0.95 },
+    { label: 'RAG & Retrieval',       value: 0.90 },
+    { label: 'LLM Eval & Observability', value: 0.82 },
+    { label: 'Data Engineering',      value: 0.85 },
+    { label: 'Cloud (AWS·GCP·Azure)', value: 0.80 },
+    { label: 'Backend & APIs',        value: 0.88 },
+  ];
+
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const N = COMPETENCIES.length;
+  const RINGS = 5;
+  let size = 0;      // CSS pixel square size
+  let anim = null;
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    size = Math.round(rect.width);
+    if (!size) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function draw(progress) {
+    if (!size) return;
+    const cx = size / 2;
+    const cy = size / 2;
+    const maxRadius = (size / 2) * 0.70; // leave ~22%+ margin for labels
+    ctx.clearRect(0, 0, size, size);
+
+    const angleFor = i => -Math.PI / 2 + (i / N) * Math.PI * 2;
+
+    // grid rings
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    for (let r = 1; r <= RINGS; r++) {
+      const rr = maxRadius * (r / RINGS);
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) {
+        const a = angleFor(i);
+        const x = cx + Math.cos(a) * rr;
+        const y = cy + Math.sin(a) * rr;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    // axis spokes + labels
+    ctx.fillStyle = '#6b7a99';
+    ctx.font = "10px 'DM Mono', monospace";
+    for (let i = 0; i < N; i++) {
+      const a = angleFor(i);
+      const vx = cx + Math.cos(a) * maxRadius;
+      const vy = cy + Math.sin(a) * maxRadius;
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(vx, vy);
+      ctx.stroke();
+
+      const lx = cx + Math.cos(a) * (maxRadius + 14);
+      const ly = cy + Math.sin(a) * (maxRadius + 14);
+      const cosA = Math.cos(a);
+      if (Math.abs(cosA) < 0.3) ctx.textAlign = 'center';
+      else if (cosA > 0) ctx.textAlign = 'left';
+      else ctx.textAlign = 'right';
+      ctx.textBaseline = Math.sin(a) > 0.3 ? 'top' : (Math.sin(a) < -0.3 ? 'bottom' : 'middle');
+      ctx.fillText(COMPETENCIES[i].label, lx, ly);
+    }
+
+    // data polygon
+    const pts = COMPETENCIES.map((c, i) => {
+      const a = angleFor(i);
+      const rr = maxRadius * c.value * progress;
+      return { x: cx + Math.cos(a) * rr, y: cy + Math.sin(a) * rr };
+    });
+
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxRadius);
+    grad.addColorStop(0, 'rgba(255,138,0,0.28)');
+    grad.addColorStop(1, 'rgba(255,138,0,0.10)');
+    ctx.beginPath();
+    pts.forEach((p, i) => { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.strokeStyle = '#ff8a00';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // glowing data vertices
+    ctx.save();
+    ctx.shadowColor = '#ff8a00';
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = '#ff8a00';
+    pts.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  function animateIn() {
+    const duration = 900;
+    const start = performance.now();
+    function frame(now) {
+      const t = Math.min((now - start) / duration, 1);
+      draw(easeOutCubic(t));
+      if (t < 1) anim = requestAnimationFrame(frame);
+    }
+    anim = requestAnimationFrame(frame);
+  }
+
+  let played = false;
+
+  // initial static render (grid/axes/labels + final if reduced motion)
+  resize();
+  draw(reduceMotion ? 1 : 0);
+
+  window.addEventListener('resize', () => {
+    resize();
+    draw(played || reduceMotion ? 1 : 0);
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !played) {
+        played = true;
+        if (reduceMotion) draw(1);
+        else animateIn();
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  io.observe(canvas);
+})();
+
+/* ═══════════════════════════════════════════
+   CERTIFICATIONS RENDERER
+   Builds one clickable credential anchor per CERTS entry.
+   (Invoked in the load sequence, just after buildPhotoMarquee() — see Task 5.)
+═══════════════════════════════════════════ */
+function renderCerts() {
+  const grid = document.querySelector('#certs .certs-grid');
+  if (!grid) return;                       // container absent → nothing to do
+  grid.innerHTML = '';
+
+  CERTS.forEach(cert => {
+    if (!cert || !cert.name || !cert.url) return;   // skip malformed entries
+
+    const hasImg = typeof cert.img === 'string' && cert.img.trim() !== '';
+    const issuer = cert.issuer || '';
+
+    const card = document.createElement('a');
+    card.className = 'cert-card';
+    card.href = cert.url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+    card.setAttribute('aria-label', `View credential: ${cert.name}`);
+
+    // Badge image (only when a path is provided); on failure hide it and
+    // reveal the sibling fallback glyph while the anchor stays clickable.
+    if (hasImg) {
+      const img = document.createElement('img');
+      img.className = 'cert-badge';
+      img.src = cert.img;
+      img.alt = `${cert.name} badge`;
+      img.setAttribute('onerror',
+        "this.style.display='none';var g=this.parentNode.querySelector('.cert-icon');if(g)g.style.display='';");
+      card.appendChild(img);
+    }
+
+    // Fallback glyph — always present. Hidden by default when an image is
+    // shown; revealed by the image's onerror handler. Shown directly when
+    // there is no image.
+    const glyph = document.createElement('span');
+    glyph.className = 'cert-icon';
+    glyph.setAttribute('aria-hidden', 'true');
+    glyph.textContent = '🎖️';
+    if (hasImg) glyph.style.display = 'none';
+    card.appendChild(glyph);
+
+    // Text block: display name + issuer · Verify ↗
+    const text = document.createElement('div');
+    const nameEl = document.createElement('div');
+    nameEl.className = 'cert-name';
+    nameEl.textContent = cert.name;
+    const issuerEl = document.createElement('div');
+    issuerEl.className = 'cert-issuer';
+    issuerEl.textContent = `${issuer} · Verify ↗`;
+    text.appendChild(nameEl);
+    text.appendChild(issuerEl);
+    card.appendChild(text);
+
+    grid.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   SKILLS RENDERER
+   Builds one .skill-group per SKILLS group, each with its icon,
+   title, and one .skill-tag per label — mirroring the original
+   static markup so appearance and the reveal animation are unchanged.
+   (Invoked in the load sequence, just after buildPhotoMarquee() — see Task 5.)
+═══════════════════════════════════════════ */
+function renderSkills() {
+  const grid = document.querySelector('#skills .skills-grid');
+  if (!grid) return;                       // container absent → nothing to do
+  grid.innerHTML = '';
+
+  SKILLS.forEach(group => {
+    if (!group || !group.title) return;    // skip malformed groups
+
+    const groupEl = document.createElement('div');
+    groupEl.className = 'skill-group';
+
+    const iconEl = document.createElement('div');
+    iconEl.className = 'skill-group-icon';
+    iconEl.textContent = group.icon || '';
+    groupEl.appendChild(iconEl);
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'skill-group-title';
+    titleEl.textContent = group.title;
+    groupEl.appendChild(titleEl);
+
+    const tagsEl = document.createElement('div');
+    tagsEl.className = 'skill-tags';
+    (group.tags || []).forEach(label => {
+      const tag = document.createElement('span');
+      tag.className = 'skill-tag';
+      tag.textContent = label;
+      tagsEl.appendChild(tag);
+    });
+    groupEl.appendChild(tagsEl);
+
+    grid.appendChild(groupEl);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   PROJECTS RENDERER
+   Builds one .project-card per PROJECTS entry, mirroring the original
+   static markup (.project-num, .project-name, .project-desc,
+   .project-stack > .stack-tag) so appearance and the reveal animation
+   are unchanged. Numbering is derived from the count of appended cards,
+   so it stays sequential (01..NN) with no gaps even if an entry is skipped.
+   (Invoked in the load sequence, just after buildPhotoMarquee() — see Task 5.)
+═══════════════════════════════════════════ */
+function renderProjects() {
+  const grid = document.querySelector('#projects .projects-grid');
+  if (!grid) return;                       // container absent → nothing to do
+  grid.innerHTML = '';
+
+  let n = 0;                               // count of cards actually appended
+  PROJECTS.forEach(proj => {
+    if (!proj || !proj.name) return;       // skip malformed entries
+
+    const card = document.createElement('div');
+    card.className = 'project-card';
+
+    const numEl = document.createElement('div');
+    numEl.className = 'project-num';
+    numEl.textContent = String(n + 1).padStart(2, '0');   // 01, 02, …
+    card.appendChild(numEl);
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'project-name';
+    nameEl.textContent = proj.name;
+    card.appendChild(nameEl);
+
+    const descEl = document.createElement('div');
+    descEl.className = 'project-desc';
+    descEl.textContent = proj.desc || '';
+    card.appendChild(descEl);
+
+    const stackEl = document.createElement('div');
+    stackEl.className = 'project-stack';
+    (proj.tags || []).forEach(tag => {
+      const tagEl = document.createElement('span');
+      tagEl.className = 'stack-tag';
+      tagEl.textContent = tag;
+      stackEl.appendChild(tagEl);
+    });
+    card.appendChild(stackEl);
+
+    grid.appendChild(card);
+    n++;
+  });
+}
 
 /* ═══════════════════════════════════════════
    PHOTO MARQUEE
@@ -1507,31 +1991,33 @@ function buildPhotoMarquee() {
   });
 }
 buildPhotoMarquee();
+
 /* ═══════════════════════════════════════════
-   FLOATING TECH ICONS CANVAS BACKGROUND
+   RENDERER INVOCATIONS (Task 5)
+   Populate the data-driven Certifications, Skills, and Projects grids.
+   These run here — after all three renderer functions are defined and
+   after buildPhotoMarquee() — which is BEFORE bindCursor() and BEFORE
+   the reveal-observer's querySelectorAll(...).observe(...) wiring and the
+   per-card transitionDelay stagger loops. That ordering guarantees the
+   generated .cert-card / .skill-group / .project-card nodes exist in the
+   DOM in time to be observed and staggered.
+═══════════════════════════════════════════ */
+renderCerts();
+renderSkills();
+renderProjects();
+
+/* ═══════════════════════════════════════════
+   NEURAL NETWORK CANVAS BACKGROUND
+   Layered feed-forward net with left-to-right "token"
+   signals flowing through edges (LLM forward-pass vibe).
+   Pure canvas 2D, DPR-crisp, respects prefers-reduced-motion.
 ═══════════════════════════════════════════ */
 (function() {
   const canvas = document.getElementById('techCanvas');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  // Mix of code symbols, tech keywords, and unicode glyphs
-  const SYMBOLS = [
-    // Code constructs
-    '{ }', '</>', '( )', '[ ]', '=>', '::',
-    'async', 'await', 'def', 'class', 'import', 'return',
-    // Tech keywords
-    'LLM', 'RAG', 'API', 'SQL', 'NLP', 'GPU', 'MCP',
-    'JSON', 'REST', 'gRPC', 'YAML', 'HTTP',
-    // AI / ML
-    'AI', 'ML', 'NN', 'GPT', 'AGI',
-    // Math / logic
-    'λ', '∑', '∇', '∞', '≡', '⊕', '∂', 'π',
-    // Icons (unicode)
-    '⚙', '⟨⟩', '⌘', '⊞', '⬡', '◈', '◎', '⟳',
-    '⬢', '⬡', '◆', '▸', '⊗', '⊞', '⟐',
-  ];
-
-  // Colour palette: blues, cyans, purples — all translucent
+  // Cool tech palette for nodes/edges (translucent when drawn)
   const PALETTE = [
     [59,130,246],   // blue
     [6,182,212],    // cyan
@@ -1539,104 +2025,620 @@ buildPhotoMarquee();
     [139,92,246],   // violet
     [14,165,233],   // sky
   ];
+  const ACCENT = [255,138,0]; // brand orange — traveling signals only
 
-  const N = 70;
-  const particles = [];
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
+  let W = 0, H = 0, dpr = 1;
+  let layers = [];   // array of layers; each layer = array of node objects
+  let nodes  = [];   // flat list of all nodes
+  let signals = [];  // traveling token signals
 
-  for (let i = 0; i < N; i++) {
-    const col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-    const isLarge = Math.random() > 0.75;
-    particles.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      symbol: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-      size: isLarge ? 14 + Math.random()*10 : 8 + Math.random()*8,
-      speedX: (Math.random() - 0.5) * 0.22,
-      speedY: -0.08 - Math.random() * 0.18,   // gentle upward drift
-      opacity: isLarge ? 0.06 + Math.random()*0.06 : 0.03 + Math.random()*0.05,
-      rotation: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.004,
-      r: col[0], g: col[1], b: col[2],
-      // subtle pulse
-      pulse: Math.random() * Math.PI * 2,
-      pulseSpeed: 0.005 + Math.random() * 0.01,
-    });
-  }
+  const rnd  = (a, b) => a + Math.random() * (b - a);
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-      p.pulse += p.pulseSpeed;
-      const pulsedOpacity = p.opacity * (0.75 + 0.25 * Math.sin(p.pulse));
+  // ── Build the layered network sized to the viewport ──────────
+  function buildNetwork() {
+    layers = [];
+    nodes  = [];
+    signals = [];
 
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rotation);
-      ctx.font = `${p.size}px 'DM Mono', monospace`;
-      ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${pulsedOpacity})`;
+    const narrow = W < 700;
+    const layerCount = narrow ? 4 : (W < 1100 ? 6 : 7);
+    const marginX = W * 0.06;
+    const usableW = W - marginX * 2;
 
-      // Subtle glow for larger symbols
-      if (p.size > 16) {
-        ctx.shadowColor = `rgba(${p.r},${p.g},${p.b},0.3)`;
-        ctx.shadowBlur  = 8;
+    for (let li = 0; li < layerCount; li++) {
+      // fewer nodes at the edges, denser in the middle feels organic
+      const mid = (layerCount - 1) / 2;
+      const bell = 1 - Math.abs(li - mid) / (mid + 1);
+      const baseCount = narrow ? 4 : 6;
+      const count = Math.max(3, Math.round(baseCount + bell * (narrow ? 2 : 4)));
+
+      const x = marginX + (layerCount === 1 ? 0.5 : li / (layerCount - 1)) * usableW;
+      const layer = [];
+      const marginY = H * 0.10;
+      const usableH = H - marginY * 2;
+
+      for (let ni = 0; ni < count; ni++) {
+        const t = count === 1 ? 0.5 : ni / (count - 1);
+        const jitterX = rnd(-usableW * 0.015, usableW * 0.015);
+        const jitterY = rnd(-usableH * 0.03, usableH * 0.03);
+        const isBig = Math.random() > 0.82;
+        const node = {
+          x: x + jitterX,
+          y: marginY + t * usableH + jitterY,
+          r: isBig ? rnd(2.4, 3.4) : rnd(1.3, 2.1),
+          baseColor: pick(PALETTE),
+          phase: Math.random() * Math.PI * 2,
+          phaseSpeed: rnd(0.006, 0.016),
+          activation: 0,       // brief flash when a signal passes
+          layer: li,
+          out: [],             // outgoing edges (indices into next layer)
+        };
+        layer.push(node);
+        nodes.push(node);
       }
-      ctx.fillText(p.symbol, 0, 0);
-      ctx.restore();
+      layers.push(layer);
+    }
 
-      p.x += p.speedX;
-      p.y += p.speedY;
-      p.rotation += p.rotSpeed;
-
-      // Wrap around edges
-      const pad = 80;
-      if (p.x < -pad)              p.x = canvas.width  + pad;
-      if (p.x > canvas.width+pad)  p.x = -pad;
-      if (p.y < -pad)              p.y = canvas.height + pad;
-      if (p.y > canvas.height+pad) p.y = -pad;
-    });
-    requestAnimationFrame(draw);
+    // ── Connect each node to 2–3 nearest nodes in the next layer ─
+    for (let li = 0; li < layers.length - 1; li++) {
+      const cur = layers[li];
+      const nxt = layers[li + 1];
+      cur.forEach(n => {
+        const ranked = nxt
+          .map((m, idx) => ({ idx, d: Math.abs(m.y - n.y) }))
+          .sort((a, b) => a.d - b.d);
+        const links = Math.min(nxt.length, 2 + Math.round(Math.random()));
+        n.out = ranked.slice(0, links).map(o => o.idx);
+      });
+    }
   }
-  draw();
+
+  // ── Spawn a token signal at the input layer ──────────────────
+  function spawnSignal() {
+    if (!layers.length || !layers[0].length) return null;
+    const node = pick(layers[0]);
+    return {
+      layer: 0,
+      from: node,
+      to: nextNodeFrom(node),
+      t: 0,
+      speed: rnd(0.006, 0.013),
+      color: Math.random() > 0.45 ? ACCENT : [6,182,212], // orange or bright cyan
+    };
+  }
+
+  function nextNodeFrom(node) {
+    if (!node.out || !node.out.length) return null;
+    const nextLayer = layers[node.layer + 1];
+    if (!nextLayer) return null;
+    return nextLayer[pick(node.out)];
+  }
+
+  const SIGNAL_COUNT = () => (W < 700 ? 6 : 9);
+
+  function initSignals() {
+    signals = [];
+    const n = SIGNAL_COUNT();
+    for (let i = 0; i < n; i++) {
+      const s = spawnSignal();
+      if (s) { s.t = Math.random(); signals.push(s); }
+    }
+  }
+
+  // ── DPR-crisp sizing ─────────────────────────────────────────
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    buildNetwork();
+    if (!reduceMotion) initSignals();
+  }
+
+  // ── Drawing helpers ──────────────────────────────────────────
+  function drawEdges() {
+    for (let li = 0; li < layers.length - 1; li++) {
+      const cur = layers[li];
+      const nxt = layers[li + 1];
+      cur.forEach(n => {
+        n.out.forEach(idx => {
+          const m = nxt[idx];
+          const c = n.baseColor;
+          ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},0.07)`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(m.x, m.y);
+          ctx.stroke();
+        });
+      });
+    }
+  }
+
+  function drawNodes(animate) {
+    nodes.forEach(n => {
+      let alpha = 0.15;
+      if (animate) {
+        n.phase += n.phaseSpeed;
+        alpha = 0.15 + 0.12 * (0.5 + 0.5 * Math.sin(n.phase));
+        if (n.activation > 0) {
+          alpha = Math.min(0.9, alpha + n.activation * 0.6);
+          n.activation *= 0.90; // decay the flash
+          if (n.activation < 0.02) n.activation = 0;
+        }
+      } else {
+        alpha = 0.22;
+      }
+      const c = n.baseColor;
+      const radius = n.r * (n.activation > 0 ? 1.6 : 1);
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${alpha})`;
+      ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function drawSignals() {
+    signals.forEach(s => {
+      if (!s.from || !s.to) return;
+      const x = s.from.x + (s.to.x - s.from.x) * s.t;
+      const y = s.from.y + (s.to.y - s.from.y) * s.t;
+      const c = s.color;
+      // short fading trail
+      const tx = s.from.x + (s.to.x - s.from.x) * Math.max(0, s.t - 0.14);
+      const ty = s.from.y + (s.to.y - s.from.y) * Math.max(0, s.t - 0.14);
+      const grad = ctx.createLinearGradient(tx, ty, x, y);
+      grad.addColorStop(0, `rgba(${c[0]},${c[1]},${c[2]},0)`);
+      grad.addColorStop(1, `rgba(${c[0]},${c[1]},${c[2]},0.45)`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      // bright head
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},0.85)`;
+      ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function advanceSignals() {
+    signals.forEach((s, i) => {
+      if (!s.from || !s.to) { const ns = spawnSignal(); if (ns) signals[i] = ns; return; }
+      s.t += s.speed;
+      if (s.t >= 1) {
+        // arrived at target node → activate it, hop to next edge
+        s.to.activation = 1;
+        const arrived = s.to;
+        const next = nextNodeFrom(arrived);
+        if (next) {
+          s.from = arrived;
+          s.to = next;
+          s.layer = arrived.layer;
+          s.t = 0;
+        } else {
+          // exited last layer → respawn at input layer
+          const ns = spawnSignal();
+          if (ns) signals[i] = ns; else signals[i].t = 0;
+        }
+      }
+    });
+  }
+
+  // ── Static single frame (reduced motion) ─────────────────────
+  function drawStatic() {
+    ctx.clearRect(0, 0, W, H);
+    drawEdges();
+    drawNodes(false);
+  }
+
+  // ── Animation loop ───────────────────────────────────────────
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    drawEdges();
+    advanceSignals();
+    drawNodes(true);
+    drawSignals();
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  if (reduceMotion) {
+    drawStatic();
+  } else {
+    requestAnimationFrame(loop);
+  }
 })();
 
 /* ═══════════════════════════════════════════
-   TYPED ANIMATION
+   TOKEN-STREAM HELPER (shared)
+   Advances a reveal index through `text` in small
+   word-chunks with jittered timing to mimic an LLM
+   streaming tokens. Calls onChunk(revealedText) after
+   each step and onDone() when the full text is shown.
+═══════════════════════════════════════════ */
+function streamText(text, onChunk, onDone, opts) {
+  opts = opts || {};
+  const base = opts.base != null ? opts.base : 55;   // ms
+  const jitter = opts.jitter != null ? opts.jitter : 40; // ± ms
+  let i = 0;
+  let timer = null;
+  function nextChunkSize(from) {
+    // reveal 2–4 chars; if we land on a space, extend to the end of a short next word
+    let n = 2 + Math.floor(Math.random() * 3); // 2..4
+    let end = Math.min(from + n, text.length);
+    if (text[end - 1] === ' ' || text[end] === ' ') {
+      // peek the upcoming word and swallow it if it's short
+      let ws = end;
+      while (ws < text.length && text[ws] === ' ') ws++;
+      let we = ws;
+      while (we < text.length && text[we] !== ' ') we++;
+      if (we - ws <= 6) end = we;
+    }
+    return end;
+  }
+  function step() {
+    i = nextChunkSize(i);
+    onChunk(text.slice(0, i));
+    if (i >= text.length) { if (onDone) onDone(); return; }
+    const delay = Math.max(12, base + (Math.random() * 2 - 1) * jitter);
+    timer = setTimeout(step, delay);
+  }
+  step();
+  return function cancel() { if (timer) clearTimeout(timer); };
+}
+
+/* ═══════════════════════════════════════════
+   TYPED ANIMATION  (token-stream hero typewriter)
 ═══════════════════════════════════════════ */
 (function() {
   const el = document.getElementById('heroTitle');
+  if (!el) return;
+  const genLabel = document.getElementById('genLabel');
   const phrases = [
-    'AI Software Engineer · Agentic AI · Multi-Agent Systems',
-    'LangGraph · LangChain · FastAPI · RAG',
-    'AWS · GCP · Azure · Neo4j · ChromaDB',
-    'Google & Databricks Certified Professional',
+    'Gen AI & Agentic AI Engineer · Multi-Agent Systems',
+    'LangGraph · LangChain · RAG · MCP · FastAPI',
+    'Data Engineering · Neo4j · pgvector · Databricks',
+    'AWS · GCP · Azure — Certified Professional',
   ];
-  let pi=0, ci=0, del=false;
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const wrap = document.createElement('span');
   const cur  = document.createElement('span');
   cur.className = 'typed-cursor';
   el.textContent = '';
   el.appendChild(wrap);
   el.appendChild(cur);
-  function go() {
+
+  if (reduceMotion) {
+    wrap.textContent = phrases[0];
+    return; // static block cursor, no streaming/cycle, no gen label
+  }
+
+  let pi = 0;
+
+  function flashGenLabel() {
+    if (!genLabel) return;
+    genLabel.classList.add('show');
+    setTimeout(() => genLabel.classList.remove('show'), 700);
+  }
+
+  function typePhrase() {
     const phrase = phrases[pi];
-    if (!del) {
-      wrap.textContent = phrase.slice(0, ++ci);
-      if (ci === phrase.length) { del=true; setTimeout(go,2000); return; }
-      setTimeout(go, 38);
-    } else {
+    flashGenLabel();
+    streamText(phrase, function(txt) {
+      wrap.textContent = txt;
+    }, function() {
+      // finished streaming; hold, then delete
+      setTimeout(deletePhrase, 2000);
+    }, { base: 55, jitter: 40 });
+  }
+
+  function deletePhrase() {
+    const phrase = phrases[pi];
+    let ci = phrase.length;
+    (function del() {
       wrap.textContent = phrase.slice(0, --ci);
-      if (ci === 0) { del=false; pi=(pi+1)%phrases.length; setTimeout(go,300); return; }
-      setTimeout(go, 16);
+      if (ci <= 0) { pi = (pi + 1) % phrases.length; setTimeout(typePhrase, 300); return; }
+      setTimeout(del, 12);
+    })();
+  }
+
+  typePhrase();
+})();
+
+/* ═══════════════════════════════════════════
+   AI CHAT WIDGET  (offline auto-cycling prompt→response)
+═══════════════════════════════════════════ */
+(function() {
+  const chat = document.getElementById('aiChat');
+  const body = document.getElementById('aiChatBody');
+  if (!chat || !body) return;
+
+  const pairs = [
+    { prompt: "summarize Dharma's expertise", response: "Gen AI & Agentic AI engineer. Builds production multi-agent systems with LangGraph, LangChain, RAG and MCP on FastAPI — deployed across AWS, GCP & Azure." },
+    { prompt: "what has he shipped?", response: "DocuMind (multi-agent doc intelligence), LoopDesk (human-in-the-loop support agents), and RepoSage (evidence-first codebase copilot)." },
+    { prompt: "which data & vector stack?", response: "Neo4j, pgvector, PostgreSQL and ChromaDB — plus Databricks & Google-certified data engineering." },
+    { prompt: "is he certified?", response: "Yes — 9 credentials across Google Cloud, AWS, Azure & Databricks, including Generative AI Leader." },
+  ];
+
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function makeMsg(cls) {
+    const m = document.createElement('div');
+    m.className = 'ai-msg ' + cls;
+    body.appendChild(m);
+    return m;
+  }
+
+  if (reduceMotion) {
+    // render first pair statically, no loop
+    makeMsg('user').textContent = pairs[0].prompt;
+    makeMsg('assistant').textContent = pairs[0].response;
+    return;
+  }
+
+  let idx = 0;
+
+  function runPair() {
+    body.innerHTML = '';
+    const pair = pairs[idx];
+    const userMsg = makeMsg('user');
+
+    streamText(pair.prompt, function(txt) {
+      userMsg.textContent = txt;
+    }, function() {
+      // thinking indicator
+      const think = makeMsg('assistant');
+      think.innerHTML = '<span class="ai-typing"><span></span><span></span><span></span></span>';
+      setTimeout(function() {
+        // replace thinking with streamed response
+        think.innerHTML = '';
+        streamText(pair.response, function(txt) {
+          think.textContent = txt;
+        }, function() {
+          setTimeout(function() {
+            idx = (idx + 1) % pairs.length;
+            runPair();
+          }, 1600);
+        }, { base: 55, jitter: 40 });
+      }, 850);
+    }, { base: 55, jitter: 40 });
+  }
+
+  runPair();
+})();
+
+/* ═══════════════════════════════════════════
+   PLAYGROUND — mini RAG / agent (offline, keyword-matched)
+   Classifier → Retriever → Responder pipeline over the
+   in-scope PROJECTS / SKILLS / CERTS data arrays.
+═══════════════════════════════════════════ */
+(function() {
+  const section = document.getElementById('playground');
+  if (!section) return;
+  const chipsEl  = document.getElementById('pgChips');
+  const form     = document.getElementById('pgForm');
+  const input    = document.getElementById('pgInput');
+  const askBtn   = document.getElementById('pgAsk');
+  const output   = document.getElementById('pgOutput');
+  const pipeline = document.getElementById('pgPipeline');
+  if (!chipsEl || !form || !input || !askBtn || !output || !pipeline) return;
+
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const stages = {
+    classify: pipeline.querySelector('[data-stage="classify"]'),
+    retrieve: pipeline.querySelector('[data-stage="retrieve"]'),
+    respond:  pipeline.querySelector('[data-stage="respond"]'),
+  };
+
+  const PRESETS = [
+    'What are your core skills?',
+    'What projects have you shipped?',
+    'Which certifications do you hold?',
+    'Which cloud & data stack?',
+    'Tell me about agentic AI experience',
+  ];
+
+  // ── helpers to pull data safely from the in-scope arrays ──
+  function skillGroup(title) {
+    return (typeof SKILLS !== 'undefined' ? SKILLS : []).find(g => g.title === title);
+  }
+  function firstSentence(text) {
+    if (!text) return '';
+    const m = text.split(/(?<=[.!])\s/)[0] || text;
+    return m.replace(/\s+/g, ' ').trim();
+  }
+  function shortName(name) {
+    // take the part before an en/em dash or hyphen separator
+    return (name || '').split(/\s+[–—-]\s+/)[0].trim();
+  }
+
+  // ── 1) INTENT CLASSIFIER (priority order: most specific first) ──
+  function classify(query) {
+    const q = (query || '').toLowerCase();
+    const has = arr => arr.some(k => q.includes(k));
+    if (has(['agent','agentic','langgraph','rag','multi-agent','llm','mcp'])) return 'agentic';
+    if (has(['cert','certification','credential','badge','certified'])) return 'certs';
+    if (has(['cloud','aws','gcp','azure','database','data','vector','neo4j','pgvector'])) return 'cloud';
+    if (has(['project','shipped','built','build','portfolio','work','documind','loopdesk','reposage'])) return 'projects';
+    if (has(['skill','stack','tech','tools','language','framework'])) return 'skills';
+    if (has(['who','expertise','summary','about','experience','yourself'])) return 'about';
+    return 'unknown';
+  }
+
+  // ── 2) RETRIEVER — derive answer + source from the data arrays ──
+  function retrieve(intent) {
+    const skills   = typeof SKILLS   !== 'undefined' ? SKILLS   : [];
+    const projects = typeof PROJECTS !== 'undefined' ? PROJECTS : [];
+    const certs    = typeof CERTS    !== 'undefined' ? CERTS    : [];
+
+    switch (intent) {
+      case 'skills': {
+        const lines = skills.map(g => `• ${g.title}: ${g.tags.slice(0,4).join(', ')}`);
+        return { answer: 'Core skills span ' + skills.length + ' areas:\n' + lines.join('\n'), source: 'Skills' };
+      }
+      case 'projects': {
+        const picks = projects.slice(0, 4).map(p => `• ${shortName(p.name)} — ${firstSentence(p.desc)}`);
+        return { answer: 'A few things I\'ve shipped:\n' + picks.join('\n'), source: 'Projects' };
+      }
+      case 'certs': {
+        const names = certs.slice(0, 4).map(c => c.name);
+        return { answer: certs.length + ' credentials incl. ' + names.join(', ') + (certs.length > names.length ? ', and more.' : '.'), source: 'Certifications' };
+      }
+      case 'cloud': {
+        const cloud = skillGroup('Cloud');
+        const dbs   = skillGroup('Databases');
+        const parts = [];
+        if (cloud) parts.push('Cloud: ' + cloud.tags.join(', '));
+        if (dbs)   parts.push('Data: ' + dbs.tags.join(', '));
+        return { answer: parts.join('\n') || 'Cloud & data stack details unavailable.', source: 'Skills' };
+      }
+      case 'agentic': {
+        const ai = skillGroup('AI & Agentic');
+        const agenticProjects = projects
+          .filter(p => /agent|langgraph|rag/i.test(p.name + ' ' + (p.tags||[]).join(' ')))
+          .slice(0, 3)
+          .map(p => shortName(p.name));
+        const aiLine = ai ? 'AI & Agentic toolkit: ' + ai.tags.join(', ') + '.' : '';
+        const projLine = agenticProjects.length ? '\nAgentic builds: ' + agenticProjects.join(', ') + '.' : '';
+        return { answer: aiLine + projLine, source: 'Skills · Projects' };
+      }
+      case 'about': {
+        const ai = skillGroup('AI & Agentic');
+        const aiTags = ai ? ai.tags.slice(0, 4).join(', ') : 'multi-agent systems';
+        return { answer: 'A Gen AI & Agentic AI engineer working across ' + aiTags + ', with ' + projects.length + ' projects shipped and ' + certs.length + ' certifications earned.', source: 'Skills · Projects' };
+      }
+      default:
+        return { answer: 'I can answer about skills, projects, certifications, cloud/data stack, or agentic AI — try one of the chips above.', source: null };
     }
   }
-  go();
+
+  // ── stage state helpers ──
+  function resetStages() {
+    Object.values(stages).forEach(s => { if (s) s.classList.remove('active','done'); });
+  }
+  function setActive(name) {
+    const s = stages[name];
+    if (s) { s.classList.remove('done'); s.classList.add('active'); }
+  }
+  function setDone(name) {
+    const s = stages[name];
+    if (s) { s.classList.remove('active'); s.classList.add('done'); }
+  }
+
+  function renderAnswer(result) {
+    output.innerHTML = '';
+    const ans = document.createElement('div');
+    ans.className = 'pg-answer';
+    output.appendChild(ans);
+    const finish = () => {
+      if (result.source) {
+        const src = document.createElement('div');
+        src.className = 'pg-source';
+        src.textContent = 'retrieved from: ' + result.source;
+        output.appendChild(src);
+      }
+    };
+    if (reduceMotion) {
+      ans.textContent = result.answer;
+      finish();
+    } else {
+      streamText(result.answer, function(txt) { ans.textContent = txt; }, finish, { base: 22, jitter: 18 });
+    }
+  }
+
+  let busy = false;
+  function setBusy(state) {
+    busy = state;
+    input.disabled = state;
+    askBtn.disabled = state;
+  }
+
+  // ── 4) PIPELINE ANIMATION ──
+  function ask(query) {
+    query = (query || '').trim();
+    if (!query || busy) return;
+    setBusy(true);
+    resetStages();
+    output.innerHTML = '';
+
+    if (reduceMotion) {
+      const intent = classify(query);
+      setDone('classify'); setDone('retrieve'); setDone('respond');
+      renderAnswer(retrieve(intent));
+      setBusy(false);
+      return;
+    }
+
+    // Step 1: Classifier
+    setActive('classify');
+    setTimeout(function() {
+      const intent = classify(query);
+      setDone('classify');
+      // Step 2: Retriever
+      setActive('retrieve');
+      setTimeout(function() {
+        const result = retrieve(intent);
+        setDone('retrieve');
+        // Step 3: Responder → stream
+        setActive('respond');
+        output.innerHTML = '';
+        const ans = document.createElement('div');
+        ans.className = 'pg-answer';
+        output.appendChild(ans);
+        streamText(result.answer, function(txt) {
+          ans.textContent = txt;
+        }, function() {
+          if (result.source) {
+            const src = document.createElement('div');
+            src.className = 'pg-source';
+            src.textContent = 'retrieved from: ' + result.source;
+            output.appendChild(src);
+          }
+          setDone('respond');
+          setBusy(false);
+        }, { base: 22, jitter: 18 });
+      }, 700);
+    }, 600);
+  }
+
+  // ── 1) render preset chips ──
+  PRESETS.forEach(function(q) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'pg-chip';
+    chip.textContent = q;
+    chip.addEventListener('click', function() {
+      input.value = q;
+      ask(q);
+    });
+    chipsEl.appendChild(chip);
+  });
+
+  // ── 5) submit handling ──
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    ask(input.value);
+  });
+
+  if (typeof bindCursor === 'function') bindCursor();
 })();
 
 /* ═══════════════════════════════════════════
@@ -1644,14 +2646,135 @@ buildPhotoMarquee();
 ═══════════════════════════════════════════ */
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
-(function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
-function bindCursor() {
-  document.querySelectorAll('a,button,.skill-tag,.cert-card,.logo-pill').forEach(el => {
-    el.addEventListener('mouseenter',()=>{ cursor.style.width='18px'; cursor.style.height='18px'; ring.style.width='50px'; ring.style.height='50px'; });
-    el.addEventListener('mouseleave',()=>{ cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
+const token  = document.getElementById('cursorToken');
+
+// Module-level list of interactive targets + refresher. `cursorInteractiveEls`
+// (var, hoisted) and refreshInteractiveTargets (hoisted function declaration) are
+// safe to reference/call from any earlier IIFE (e.g. the playground calls
+// bindCursor() before this block runs). The selector is inlined to avoid any
+// const/TDZ dependency.
+var cursorInteractiveEls = [];
+function refreshInteractiveTargets() {
+  var sel = 'a, button, .skill-tag, .cert-card, .logo-pill, .project-card, .social-link, .pub-link, .stat-card, .hobby-card';
+  cursorInteractiveEls = Array.prototype.slice.call(document.querySelectorAll(sel));
+}
+
+if (cursor && ring) {
+  const TRAIL_COLORS = ['#ff8a00', '#38bdf8', '#f472b6'];
+  const TOKEN_GLYPHS = ['▮', 'λ', '{}', '->'];
+  const MAX_TRAIL = 18;
+  const SNAP_MARGIN = 24;
+
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  refreshInteractiveTargets();
+
+  let mx = 0, my = 0;   // actual pointer
+  let rx = 0, ry = 0;   // eased ring position
+  let hovering = false;
+
+  const trail = [];
+  let lastTrailX = 0, lastTrailY = 0;
+
+  function spawnTrail(x, y, colorIdx) {
+    if (reduceMotion) return;
+    const p = document.createElement('div');
+    p.className = 'cursor-trail';
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    p.style.background = TRAIL_COLORS[colorIdx % TRAIL_COLORS.length];
+    p.style.opacity = '0.85';
+    document.body.appendChild(p);
+    trail.push(p);
+    if (trail.length > MAX_TRAIL) {
+      const old = trail.shift();
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+    }
+    // fade + shrink then remove
+    requestAnimationFrame(() => {
+      p.style.opacity = '0';
+      p.style.transform = 'translate(-50%,-50%) scale(0.2)';
+    });
+    setTimeout(() => {
+      const i = trail.indexOf(p);
+      if (i !== -1) trail.splice(i, 1);
+      if (p.parentNode) p.parentNode.removeChild(p);
+    }, 450);
+  }
+
+  let trailTick = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+
+    // MAGNETIC SNAP: find a nearby interactive element.
+    let snapEl = null;
+    for (let i = 0; i < cursorInteractiveEls.length; i++) {
+      const el = cursorInteractiveEls[i];
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) continue;
+      if (mx >= r.left - SNAP_MARGIN && mx <= r.right + SNAP_MARGIN &&
+          my >= r.top - SNAP_MARGIN && my <= r.bottom + SNAP_MARGIN) {
+        snapEl = { cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
+        break;
+      }
+    }
+
+    if (snapEl) {
+      if (!hovering) {
+        hovering = true;
+        cursor.classList.add('interactive');
+        ring.classList.add('interactive');
+        if (token) {
+          token.textContent = TOKEN_GLYPHS[Math.floor(Math.random() * TOKEN_GLYPHS.length)];
+          token.classList.add('show');
+        }
+      }
+      // gentle pull of the ring target toward element center.
+      window.__cursorTargetX = mx + (snapEl.cx - mx) * 0.5;
+      window.__cursorTargetY = my + (snapEl.cy - my) * 0.5;
+    } else {
+      if (hovering) {
+        hovering = false;
+        cursor.classList.remove('interactive');
+        ring.classList.remove('interactive');
+        if (token) token.classList.remove('show');
+      }
+      window.__cursorTargetX = mx;
+      window.__cursorTargetY = my;
+    }
+
+    if (token) {
+      token.style.left = (mx + 14) + 'px';
+      token.style.top  = (my - 14) + 'px';
+    }
+
+    // TRAIL spawn when moved a few px.
+    if (!reduceMotion) {
+      const dx = mx - lastTrailX, dy = my - lastTrailY;
+      if (dx * dx + dy * dy > 36) {
+        spawnTrail(mx, my, trailTick++);
+        lastTrailX = mx; lastTrailY = my;
+      }
+    }
   });
+
+  window.__cursorTargetX = 0; window.__cursorTargetY = 0;
+  (function animRing() {
+    const tx = window.__cursorTargetX, ty = window.__cursorTargetY;
+    rx += (tx - rx) * 0.12; ry += (ty - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+}
+
+// Kept for compatibility (called from possibly-earlier sites too):
+// (re)collects interactive targets so newly rendered cards get the effect.
+// Safe/idempotent — no-ops gracefully if the cursor never initialised.
+function bindCursor() {
+  refreshInteractiveTargets();
 }
 bindCursor();
 
@@ -1746,11 +2869,11 @@ function sendEmail() {
   document.getElementById('btnLoader').style.display='inline-flex';
   document.getElementById('sendBtn').disabled=true;
 
-  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY') {
+  if(!isEmailJSConfigured(EMAILJS_CONFIG)) {
     setTimeout(()=>{ resetBtn(); document.getElementById('contactForm').style.display='none'; document.getElementById('formSuccess').style.display='block'; showToast('⚠ Demo mode — configure EmailJS keys','error'); },1200);
     return;
   }
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { from_name:name, from_email:email, subject, message, to_email:'sunkaradharmateja1729@gmail.com' })
+  emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, { from_name:name, from_email:email, subject, message, to_email:EMAILJS_CONFIG.toEmail })
     .then(()=>{ resetBtn(); document.getElementById('contactForm').style.display='none'; document.getElementById('formSuccess').style.display='block'; showToast('✓ Message sent!','success'); })
     .catch(()=>{ resetBtn(); showToast('✗ Failed — try emailing directly','error'); });
 }
